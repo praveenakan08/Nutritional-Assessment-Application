@@ -51,7 +51,7 @@ const Register = (): JSX.Element => {
     // formInput.preventDefault();
     console.log("Form Input", formInput);
     axios
-      .post("http://localhost:3001/register", {
+      .post("http://locahost:3001/api/register", {
         name,
         email,
         gender,

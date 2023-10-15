@@ -39,9 +39,10 @@ const Login = (): JSX.Element => {
   } = useForm();
 
   const onSubmit = (formInput: any) => {
-    formInput.preventDefault();
     axios
-      .get(`http://localhost:3001/register?email=${email}`)
+      .get(
+        `http://localhost:3001/api/login?email=${email}&password=${password}`
+      )
       .then((result: any) => {
         console.log("Login Result", result);
       })
@@ -108,7 +109,12 @@ const Login = (): JSX.Element => {
               />
             </Grid>
             <Grid item xs={12} alignItems="center">
-              <Button variant="contained" color="success" size="large">
+              <Button
+                variant="contained"
+                color="success"
+                size="large"
+                type="submit"
+              >
                 Login
               </Button>
             </Grid>
