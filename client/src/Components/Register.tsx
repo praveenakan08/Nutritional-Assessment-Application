@@ -15,7 +15,7 @@ import {
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-// import Logo from "../public/nutrifit-logo.jpg";
+import "typeface-cormorant";
 
 const theme = createTheme({
   palette: {
@@ -30,6 +30,11 @@ const theme = createTheme({
       active: "#001E3C",
     },
   },
+  typography: {
+    fontFamily: [
+      'tinos',
+    ].join(','),
+  },
 });
 
 const Register = (): JSX.Element => {
@@ -38,7 +43,7 @@ const Register = (): JSX.Element => {
   const [age, setAge] = useState<number>(0);
   const [gender, setGender] = useState<string>("");
   const [height, setHeight] = useState<string>("");
-  const [bmi, setBmi] = useState<string>("");
+  const [weight, setWeight] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const {
@@ -57,7 +62,7 @@ const Register = (): JSX.Element => {
         gender,
         age,
         height,
-        bmi,
+        weight,
         password,
       })
       .then((result: any) => {
@@ -90,15 +95,14 @@ const Register = (): JSX.Element => {
                   color="white"
                   display={"flex"}
                   justifyContent={"center"}
-                  fontFamily="sans-serif"
                 >
                   <img
-                    src="/nutrifit-logo.jpg"
+                    src="/nutrifit-logo.png"
                     height={60}
                     width={60}
                     alt="Logo"
                   />
-                  <Box sx={{ paddingLeft: "4px" }}>Register</Box>
+                  <Box sx={{ paddingLeft: "4px" }}>NutriFit</Box>
                 </Typography>
               </Box>
             </Grid>
@@ -124,7 +128,7 @@ const Register = (): JSX.Element => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               <FormLabel id="age">Age</FormLabel>
               <TextField
                 fullWidth
@@ -136,7 +140,7 @@ const Register = (): JSX.Element => {
                 onChange={(e) => setAge(parseInt(e.target.value))}
               />
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
               <FormLabel id="gender">Gender</FormLabel>
               <RadioGroup row aria-label="gender" name="gender">
                 <FormControlLabel
@@ -150,12 +154,6 @@ const Register = (): JSX.Element => {
                   control={<Radio />}
                   label="Male"
                   onChange={(e) => setGender("Male")}
-                />
-                <FormControlLabel
-                  value="other"
-                  control={<Radio />}
-                  label="Other"
-                  onChange={(e) => setGender("Other")}
                 />
               </RadioGroup>
             </Grid>
@@ -171,17 +169,17 @@ const Register = (): JSX.Element => {
               />
             </Grid>
             <Grid item xs={6}>
-              <FormLabel id="bmi">Body Mass Index (BMI)</FormLabel>
+              <FormLabel id="weight">Weight</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Enter your BMI"
-                id="bmi"
+                placeholder="Enter your weight"
+                id="weight"
                 required={true}
-                error={isNaN(parseInt(bmi))}
-                onChange={(e) => setBmi(e.target.value)}
-              />
+                error={weight == null}
+                onChange={(e) => setWeight(e.target.value)}
+              />  
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <FormLabel id="password">Password</FormLabel>
               <TextField
                 fullWidth
@@ -192,7 +190,7 @@ const Register = (): JSX.Element => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} alignItems="center">
+            <Grid item xs={12} style={{textAlign:'center'}}>
               <Button
                 variant="contained"
                 color="success"
@@ -201,9 +199,10 @@ const Register = (): JSX.Element => {
               >
                 Register
               </Button>
+
             </Grid>
-            <Grid item xs={12} alignItems="center">
-              <Link to="/login">Already Registered?Login Here!</Link>
+            <Grid item xs={12} style={{textAlign:'center'}}>
+              <Link to="/login">Already Registered? Login Here!</Link>
             </Grid>
           </Grid>
         </form>

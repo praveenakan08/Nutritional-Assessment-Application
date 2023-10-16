@@ -11,13 +11,13 @@ app.use(express.json());
 mongoose.connect('mongodb://127.0.0.1:27017/admin');
 
 app.post('/register',(req,resp)=>{
-    const{name,email,gender,age,height,bmi,password}=req.body;
+    const{name,email,gender,age,height,weight,password}=req.body;
     RegisterModel.findOne({email:email}).then((user: any)=>{
         if(user){
             resp.json("Already have an account");
         }
         else{
-            RegisterModel.create({email:email,name:name,age:age,gender:gender,height:height,bmi:bmi,password:password})
+            RegisterModel.create({email:email,name:name,age:age,gender:gender,height:height,weight:weight,password:password})
             .then((result:any)=>{
                 resp.json("Account Created!")
             }).catch((err:any)=>{

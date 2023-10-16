@@ -12,7 +12,6 @@ import {
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-// import Logo from "../public/nutrifit-logo.jpg";
 
 const theme = createTheme({
   palette: {
@@ -26,6 +25,11 @@ const theme = createTheme({
     action: {
       active: "#001E3C",
     },
+  },
+  typography: {
+    fontFamily: [
+      'tinos',
+    ].join(','),
   },
 });
 
@@ -72,15 +76,14 @@ const Login = (): JSX.Element => {
                   color="white"
                   display={"flex"}
                   justifyContent={"center"}
-                  fontFamily="sans-serif"
                 >
                   <img
-                    src="/nutrifit-logo.jpg"
+                    src="/nutrifit-logo.png"
                     height={60}
                     width={60}
                     alt="Logo"
                   />
-                  <Box sx={{ paddingLeft: "4px" }}>Register</Box>
+                  <Box sx={{ paddingLeft: "4px" }}>NutriFit</Box>
                 </Typography>
               </Box>
             </Grid>
@@ -107,13 +110,13 @@ const Login = (): JSX.Element => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} alignItems="center">
+            <Grid item xs={12} style={{textAlign:'center'}}>
               <Button variant="contained" color="success" size="large">
                 Login
               </Button>
             </Grid>
-            <Grid item xs={12} alignItems="center">
-              <Link to="/register">Need an account?Sign Up Here!</Link>
+            <Grid item xs={12} style={{textAlign:'center'}}>
+              <Link to="/register">New user? Sign up Here!</Link>
             </Grid>
           </Grid>
         </form>
