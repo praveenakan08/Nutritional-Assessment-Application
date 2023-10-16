@@ -12,7 +12,7 @@ import {
   Radio,
   FormControlLabel,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 // import Logo from "../public/nutrifit-logo.jpg";
@@ -33,6 +33,7 @@ const theme = createTheme({
 });
 
 const Register = (): JSX.Element => {
+  const history = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [age, setAge] = useState<number>(0);
@@ -40,7 +41,7 @@ const Register = (): JSX.Element => {
   const [height, setHeight] = useState<string>("");
   const [bmi, setBmi] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [showDialog, setShowDialog] = useState<boolean>(false);
+  //const [showDialog, setShowDialog] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -49,9 +50,9 @@ const Register = (): JSX.Element => {
 
   const onSubmit = (formInput: any) => {
     // formInput.preventDefault();
-    console.log("Form Input", formInput);
+    // console.log("Form Input", formInput);
     axios
-      .post("http://locahost:3001/api/register", {
+      .post("http://localhost:3001/api/register", {
         name,
         email,
         gender,
@@ -62,6 +63,13 @@ const Register = (): JSX.Element => {
       })
       .then((result: any) => {
         console.log("Register Result", result);
+        if (result.data.status === 200) {
+          alert(result.data.message);
+          history("/login");
+        } else {
+          alert(result.data.message);
+          history("/");
+        }
       })
       .catch((err: any) => {
         console.log(err);
