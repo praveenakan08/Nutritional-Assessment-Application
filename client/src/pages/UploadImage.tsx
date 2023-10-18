@@ -11,7 +11,7 @@ const UploadImage = (): JSX.Element => {
       console.log("Image", file);
     });
   }, []);
-  const myImageStyle = { width: "500px", height: "500px" };
+  const imageStyle = { width: "500px", height: "500px" };
 
   const AnalyzeImage = () => {
     axios.post("/api/analyze", { image });
@@ -22,7 +22,7 @@ const UploadImage = (): JSX.Element => {
         image.map((image, index) => (
           <Box sx={{ marginTop: 10 }}>
             <img
-              style={myImageStyle}
+              style={imageStyle}
               src={`${URL.createObjectURL(image)}`}
               key={index}
               alt=""
