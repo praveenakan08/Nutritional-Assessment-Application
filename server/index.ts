@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { RegisterModel } from "./models/Register";
 import path, { join } from "path";
+import * as tf from '@tensorflow/tfjs';
+import { loadImage } from "canvas";
+import * as tfn from '@tensorflow/tfjs-node';
+//import {loadGraphModel} from '@tensorflow/tfjs-converter';
 
 const port = 3001;
 const app = express();
@@ -16,6 +20,7 @@ app.use(express.static(path.join(UI_BUILD, "public")));
 // })
 
 mongoose.connect("mongodb://127.0.0.1:27017/admin");
+
 
 app.get(`/api/login`, (req, res) => {
   const email = req.query.email;
@@ -61,6 +66,30 @@ app.post(`/api/register`, (req, res) => {
       res.json({ status:500,message: "Error in Creating Account",error:err });
     });
 });
+
+app.post(`/api/analyze`,async (req,res)=>{
+  const image=req.body;
+  console.log("Image",image[0]);
+  const imagePath=image[0].path;
+
+  //const file=new File(image,'./models/model.json');
+  //const blob =URL.createObjectURL(image[0]);
+  const modelPath = './models/ML_MODEL/model.json';
+  const handler = tfn.io.fileSystem(modelPath);
+  const model = await tfn.loadLayersModel(handler);
+  console.log("model",model);
+  //const img=await loadImage(blob);
+  
+  //const input = tf.browser.fromPixels({data:new Uint8ClampedArray(img.dataMode),width:img.width,height:img.height,colorSpace:'srgb'}).toFloat().expandDims();
+
+  //const normalized = input.div(255);
+  //const predictions = model.predict(normalized) as tf.Tensor;
+
+  // const topK = 5;
+  // const topKIndices = tf.topk(predictions, topK).indices.dataSync();
+  // console.log("Top", topK, "predictions:");
+  
+})
 app.listen(port, () => {
   console.log("Server is Running at 3001");
 });
