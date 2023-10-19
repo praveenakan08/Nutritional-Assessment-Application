@@ -1,34 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Grid,
   Typography,
   Button,
   Box,
-  ThemeProvider,
-  createTheme,
   FormLabel,
   CircularProgress,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-// import Logo from "../public/nutrifit-logo.jpg";
-
-const theme = createTheme({
-  palette: {
-    background: {
-      paper: "#fff",
-    },
-    text: {
-      primary: "#173A5E",
-      secondary: "#46505A",
-    },
-    action: {
-      active: "#001E3C",
-    },
-  },
-});
 
 const Login = (): JSX.Element => {
   const history = useNavigate();
@@ -67,21 +49,16 @@ const Login = (): JSX.Element => {
       });
   };
   return (
-    <ThemeProvider theme={theme}>
-      {loader && (
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-            p: 2,
-            marginTop: 40,
-            display: "flex",
-            alignItems: "center",
-            width: 600,
-          }}
-        >
-          <CircularProgress color="success" />
-        </Box>
-      )}
+    <div
+      className="register-page"
+      style={{
+        width: "100%",
+        height: "800px",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      {loader && <CircularProgress color="success" />}
       {!loader && (
         <Box
           sx={{
@@ -89,9 +66,10 @@ const Login = (): JSX.Element => {
             boxShadow: 1,
             borderRadius: 2,
             p: 2,
-            marginTop: 10,
+            marginTop: 20,
             justifyItems: "center",
             width: 400,
+            height: 400,
           }}
         >
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -156,7 +134,7 @@ const Login = (): JSX.Element => {
           </form>
         </Box>
       )}
-    </ThemeProvider>
+    </div>
   );
 };
 

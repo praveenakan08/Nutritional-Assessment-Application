@@ -5,17 +5,27 @@ import axios from "axios";
 
 const UploadImage = (): JSX.Element => {
   const [image, setImage] = useState([]);
+
   const onDrop = useCallback((acceptedFiles: any[], rejectedFiles: any) => {
-    acceptedFiles.forEach((file: any) => {
+    acceptedFiles.forEach((file: File) => {
       setImage((prevState) => [...prevState, file] as any);
       console.log("Image", file);
     });
   }, []);
   const imageStyle = { width: "500px", height: "500px" };
 
-  const AnalyzeImage = () => {
-    axios.post("/api/analyze", { image });
-  };
+  const AnalyzeImage = useCallback(() => {
+    console.log("Image***", image);
+    axios
+      .post("http://localhost:3001/api/analyze", { ...image })
+      .then((res) => {
+        console.log("Response", res);
+      })
+      .catch((err: any) => {
+        console.log("Error", err);
+      });
+  }, [image]);
+
   return (
     <div>
       {image.length > 0 ? (
