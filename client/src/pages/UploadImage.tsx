@@ -92,7 +92,7 @@ const UploadImage = (): JSX.Element => {
                 sx={{ bgcolor: "#26672D" }}
                 variant="contained"
                 component="span"
-                startIcon={<Avatar src={'/upload-file.png'} />}
+                startIcon={<Avatar src={'/upload-file-white.png'} />}
               >
                 <Typography>Select from Computer</Typography>
               </Button>
