@@ -11,9 +11,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tensorflow/tfjs": "^4.12.0",
+    "@tensorflow/tfjs-converter": "^4.12.0",
+    "@tensorflow/tfjs-node": "^3.18.0",
+    "canvas": "^2.11.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "mongoose": "^7.6.0",
+    "node-gyp": "^9.4.0",
     "nodemon": "^3.0.1",
     "typescript": "^5.2.2"
   },
