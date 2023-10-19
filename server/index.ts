@@ -11,9 +11,6 @@ const UI_BUILD = join(__dirname);
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(UI_BUILD, "public")));
-// app.use((req,res)=>{
-//     return res.sendFile(join(UI_BUILD, '/public/index.html'));
-// })
 
 mongoose.connect("mongodb://127.0.0.1:27017/admin");
 
@@ -22,7 +19,6 @@ app.get(`/api/login`, (req, res) => {
   const password = req.query.password;
   RegisterModel.findOne({ email: email })
     .then((user: any) => {
-    //   console.log("User", user);
       if (user.password == password) {
         res.json({ status: 200, message: "User Authenticated!" });
       } else {
@@ -33,6 +29,13 @@ app.get(`/api/login`, (req, res) => {
       res.json({ status: 500, message: "Not registered!" });
     });
 });
+
+app.get(`/api/viewProfile`, (req, res) => {
+  const email = req.query.email;
+  const response = RegisterModel.findOne({ email: email }); 
+  return res.json(response);
+});
+
 app.post(`/api/register`, (req, res) => {
   const { name, email, gender, age, height, bmi, password } = req.body;
   RegisterModel.findOne({ email: email })

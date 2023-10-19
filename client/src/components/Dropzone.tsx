@@ -1,6 +1,10 @@
-import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Box } from "@mui/material";
+import {
+  Box,
+  ThemeProvider,
+  Typography,
+  createTheme,
+} from "@mui/material";
 import { CloudUpload } from "@mui/icons-material";
 
 const DropZone = (props: any): JSX.Element => {
@@ -12,42 +16,62 @@ const DropZone = (props: any): JSX.Element => {
       onDrop: onDrop,
     });
 
+  const theme = createTheme({
+    palette: {
+      background: {
+        paper: "#fff",
+      },
+      text: {
+        primary: "#173A5E",
+        secondary: "#46505A",
+      },
+      action: {
+        active: "#001E3C",
+      },
+    },
+    typography: {
+      fontFamily: ["tinos"].join(","),
+      fontSize:15
+    },
+  });
   return (
-    <Box
-      sx={{
-        bgcolor: "background.paper",
-        boxShadow: 1,
-        border: "dashed",
-        borderRadius: 2,
-        borderColor: "gray",
-        p: 2,
-        marginTop: 23,
-        justifyItems: "center",
-        width: 500,
-        height: 300,
-      }}
-    >
-      <div
-        {...getRootProps()}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          paddingTop: "100px",
+    <ThemeProvider theme={theme}>
+      <Box
+        sx={{
+          bgcolor: "background.paper",
+          boxShadow: 1,
+          border: "dashed",
+          borderRadius: 2,
+          borderColor: "gray",
+          p: 2,
+          marginTop: 23,
+          justifyItems: "center",
+          width: 500,
+          height: 300,
         }}
       >
-        <input {...getInputProps()} />
-        {isDragActive ? (
-          <p>Drop file(s) here ...</p>
-        ) : (
-          <div style={{ alignItems: "center" }}>
-            <p>Drag and drop file(s) here, or click to select files</p>
-            <div style={{ justifyContent: "center", display: "flex" }}>
-              <CloudUpload fontSize="large" />
+        <div
+          {...getRootProps()}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            paddingTop: "100px",
+          }}
+        >
+          <input {...getInputProps()} />
+          {isDragActive ? (
+            <Typography>Drop food Image here ...</Typography>
+          ) : (
+            <div style={{ alignItems: "center" }}>
+              <Typography fontSize="20">Drag and drop food image here</Typography>
+              <div style={{ justifyContent: "center", display: "flex" }}>
+                <CloudUpload fontSize="large" />
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-    </Box>
+          )}
+        </div>
+      </Box>
+    </ThemeProvider>
   );
 };
 export default DropZone;
