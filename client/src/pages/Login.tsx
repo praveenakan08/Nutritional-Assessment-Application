@@ -52,6 +52,7 @@ const Login = (): JSX.Element => {
       .then((result: any) => {
         console.log("Login Result", result);
         if (result.data.status === 200) {
+          localStorage.setItem("email", email || "");
           history("/dashboard");
         } else if (result.data.status === 403) {
           alert("Wrong password!Try again");

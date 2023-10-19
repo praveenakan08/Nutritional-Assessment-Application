@@ -5,7 +5,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   align-content: center;
   justify-content: center;
-  /* display: flex; */
+  display: flex;
   /* background-image: url('/register-background.png'); */
 }
 code {

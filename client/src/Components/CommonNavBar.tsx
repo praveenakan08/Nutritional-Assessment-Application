@@ -36,12 +36,12 @@ const theme = createTheme({
   typography: {
     fontFamily: ["tinos"].join(","),
     button: {
-      textTransform: 'none',
-    }
+      textTransform: "none",
+    },
   },
 });
 
-const CommonNavBar = (): JSX.Element => {
+const CommonNavBar = (props: any): JSX.Element => {
   return (
     <ThemeProvider theme={theme}>
       <AppBar
@@ -85,10 +85,13 @@ const CommonNavBar = (): JSX.Element => {
                 src="/profile-image.png"
                 sx={{ width: 75, height: 75 }}
               />
-              <Button variant="text" sx={{color:"#ffffff"}} component={Link} href="/viewProfile">
-                <Typography>
-                  Your Profile
-                </Typography>
+              <Button
+                variant="text"
+                sx={{ color: "#ffffff" }}
+                component={Link}
+                href="/viewProfile"
+              >
+                <Typography>Your Profile</Typography>
               </Button>
             </Grid>
 
@@ -129,6 +132,7 @@ const CommonNavBar = (): JSX.Element => {
           </Drawer>
         </Box>
       </Grid>
+      {props.children}
     </ThemeProvider>
   );
 };
