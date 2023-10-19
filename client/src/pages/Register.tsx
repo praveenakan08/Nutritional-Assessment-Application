@@ -5,8 +5,6 @@ import {
   Typography,
   Button,
   Box,
-  ThemeProvider,
-  createTheme,
   FormLabel,
   RadioGroup,
   Radio,
@@ -15,22 +13,6 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-// import Logo from "../public/nutrifit-logo.jpg";
-
-const theme = createTheme({
-  palette: {
-    background: {
-      paper: "#fff",
-    },
-    text: {
-      primary: "#173A5E",
-      secondary: "#46505A",
-    },
-    action: {
-      active: "#001E3C",
-    },
-  },
-});
 
 const Register = (): JSX.Element => {
   const history = useNavigate();
@@ -41,7 +23,7 @@ const Register = (): JSX.Element => {
   const [height, setHeight] = useState<string>("");
   const [bmi, setBmi] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  //const [showDialog, setShowDialog] = useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
@@ -76,14 +58,18 @@ const Register = (): JSX.Element => {
       });
   };
   return (
-    <ThemeProvider theme={theme}>
+    <div
+      className="register-page"
+      style={{ width: "100%", display: "flex", justifyContent: "center" }}
+    >
       <Box
         sx={{
           bgcolor: "background.paper",
           boxShadow: 1,
           borderRadius: 2,
           p: 2,
-          marginTop: 10,
+          marginTop: 2,
+          marginBottom: 2,
           justifyItems: "center",
           width: 500,
         }}
@@ -216,7 +202,7 @@ const Register = (): JSX.Element => {
           </Grid>
         </form>
       </Box>
-    </ThemeProvider>
+    </div>
   );
 };
 

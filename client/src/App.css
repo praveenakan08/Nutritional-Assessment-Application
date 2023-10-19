@@ -1,6 +1,12 @@
 .root{
-  padding: 16px 16px 16px 16px;
+  padding: 16px 16px 16px 16px; 
+  padding: 16px 16px 16px 16px; 
 }
+.register-page {
+  background-image: url('../public/bg.jpeg');
+  width:100%;
+}
+
 #label{
 padding-bottom: 2px;
 }

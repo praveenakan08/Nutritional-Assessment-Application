@@ -5,10 +5,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   align-content: center;
   justify-content: center;
-  display: flex;
-  /* background-image: url('.././assets/nutrifit-logo.jpg'); */
+  /* display: flex; */
 }
-
 code {
   font-family: sans-serif;
 }
