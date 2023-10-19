@@ -10,16 +10,16 @@ import {
   createTheme,
 } from "@mui/material";
 import axios from "axios";
-import Dropzone from "../Components/Dropzone";
-import CommonNavBar from "../Components/CommonNavBar";
+import Dropzone from "../components/Dropzone";
+import CommonNavBar from "../components/CommonNavBar";
 
 const UploadImage = (): JSX.Element => {
   const [image, setImage] = useState([]);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
-    setImage(event.target.files[0] as any)
-    console.log("Hello!!", event.target.files[0])
-  }
+    setImage(event.target.files[0] as any);
+    console.log("Hello!!", event.target.files[0]);
+  };
   const onDrop = useCallback((acceptedFiles: any[], rejectedFiles: any) => {
     acceptedFiles.forEach((file: any) => {
       setImage((prevState) => [...prevState, file] as any);
@@ -49,8 +49,8 @@ const UploadImage = (): JSX.Element => {
       fontFamily: ["tinos"].join(","),
       fontSize: 15,
       button: {
-        textTransform: 'none',
-      }
+        textTransform: "none",
+      },
     },
   });
 
@@ -76,27 +76,30 @@ const UploadImage = (): JSX.Element => {
             </Box>
 
             <Grid marginTop={28}>
-                <Divider orientation="vertical" style={{height: "100%", backgroundColor: "#26672D"}}/>
+              <Divider
+                orientation="vertical"
+                style={{ height: "100%", backgroundColor: "#26672D" }}
+              />
             </Grid>
 
             <Box paddingTop={45}>
-            <label htmlFor="upload-photo">
-              <input
-                style={{ display: "none" }}
-                id="upload-photo"
-                name="upload-photo"
-                type="file"
-                onChange={handleChange}
-              />
-              <Button
-                sx={{ bgcolor: "#26672D" }}
-                variant="contained"
-                component="span"
-                startIcon={<Avatar src={'/upload-file-white.png'} />}
-              >
-                <Typography>Select from Computer</Typography>
-              </Button>
-            </label>
+              <label htmlFor="upload-photo">
+                <input
+                  style={{ display: "none" }}
+                  id="upload-photo"
+                  name="upload-photo"
+                  type="file"
+                  onChange={handleChange}
+                />
+                <Button
+                  sx={{ bgcolor: "#26672D" }}
+                  variant="contained"
+                  component="span"
+                  startIcon={<Avatar src={"/upload-file-white.png"} />}
+                >
+                  <Typography>Select from Computer</Typography>
+                </Button>
+              </label>
             </Box>
           </Grid>
         )}

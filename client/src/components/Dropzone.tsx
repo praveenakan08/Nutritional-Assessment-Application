@@ -1,10 +1,5 @@
 import { useDropzone } from "react-dropzone";
-import {
-  Box,
-  ThemeProvider,
-  Typography,
-  createTheme,
-} from "@mui/material";
+import { Box, ThemeProvider, Typography, createTheme } from "@mui/material";
 import { CloudUpload } from "@mui/icons-material";
 
 const DropZone = (props: any): JSX.Element => {
@@ -31,7 +26,7 @@ const DropZone = (props: any): JSX.Element => {
     },
     typography: {
       fontFamily: ["tinos"].join(","),
-      fontSize:15
+      fontSize: 15,
     },
   });
   return (
@@ -63,7 +58,9 @@ const DropZone = (props: any): JSX.Element => {
             <Typography>Drop food Image here ...</Typography>
           ) : (
             <div style={{ alignItems: "center" }}>
-              <Typography fontSize="20">Drag and drop food image here</Typography>
+              <Typography fontSize="20">
+                Drag and drop food image here
+              </Typography>
               <div style={{ justifyContent: "center", display: "flex" }}>
                 <CloudUpload fontSize="large" />
               </div>

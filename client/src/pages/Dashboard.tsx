@@ -9,7 +9,7 @@ import {
   Typography,
   createTheme,
 } from "@mui/material";
-import CommonNavBar from "../Components/CommonNavBar";
+import CommonNavBar from "../components/CommonNavBar";
 
 const theme = createTheme({
   palette: {
@@ -41,7 +41,7 @@ const Dashboard = (): JSX.Element => {
               image="/upload-image.png"
               alt="upload image"
             />
-            <CardContent sx={{ display: "flex", justifyContent: "center"}}>
+            <CardContent sx={{ display: "flex", justifyContent: "center" }}>
               <Typography gutterBottom variant="h5" component="div">
                 Upload Image
               </Typography>
