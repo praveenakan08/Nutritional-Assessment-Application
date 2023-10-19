@@ -4,9 +4,10 @@ import cors from "cors";
 import { RegisterModel } from "./models/Register";
 import path, { join } from "path";
 import * as tf from '@tensorflow/tfjs';
-import { loadImage } from "canvas";
+import { ImageData, loadImage } from "canvas";
 import * as tfn from '@tensorflow/tfjs-node';
-//import {loadGraphModel} from '@tensorflow/tfjs-converter';
+import {loadGraphModel} from '@tensorflow/tfjs-converter';
+import * as fs from 'fs';
 
 const port = 3001;
 const app = express();
@@ -69,25 +70,21 @@ app.post(`/api/register`, (req, res) => {
 
 app.post(`/api/analyze`,async (req,res)=>{
   const image=req.body;
-  console.log("Image",image[0]);
-  const imagePath=image[0].path;
-
-  //const file=new File(image,'./models/model.json');
-  //const blob =URL.createObjectURL(image[0]);
+  console.log("Image",image);
+  const file=fs.createReadStream(image.path);
+  console.log("File",file);
   const modelPath = './models/ML_Model/model.json';
   const handler = tfn.io.fileSystem(modelPath);
-  const model = await tfn.loadLayersModel(handler);
-  console.log("model",model);
-  //const img=await loadImage(blob);
-  
-  //const input = tf.browser.fromPixels({data:new Uint8ClampedArray(img.dataMode),width:img.width,height:img.height,colorSpace:'srgb'}).toFloat().expandDims();
+  const model = await loadGraphModel(handler as tf.io.IOHandler);
+  const input = tf.browser.fromPixels(image);
 
-  //const normalized = input.div(255);
-  //const predictions = model.predict(normalized) as tf.Tensor;
-
-  // const topK = 5;
-  // const topKIndices = tf.topk(predictions, topK).indices.dataSync();
-  // console.log("Top", topK, "predictions:");
+  // .toFloat()
+  // .expandDims();
+console.log("Input", input);
+const normalized = input.div(255);
+const predictions = model.predict(normalized) as tf.Tensor;
+console.log("Prdictions", predictions);
+return res.json(predictions);
   
 })
 app.listen(port, () => {
