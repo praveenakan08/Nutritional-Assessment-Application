@@ -6,7 +6,7 @@ const RegisterSchema=new mongoose.Schema({
     age:Number,
     gender:String,
     height:String,
-    bmi:String,
+    weight:String,
     password:String,
 
 })
