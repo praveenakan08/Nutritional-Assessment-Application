@@ -2,22 +2,32 @@ import React, { useCallback, useState } from "react";
 import { Box, Button } from "@mui/material";
 import Dropzone from "../components/Dropzone";
 import axios from "axios";
+import FormData from "form-data";
+import { DropEvent } from "react-dropzone";
 
 const UploadImage = (): JSX.Element => {
-  const [image, setImage] = useState([]);
+  const [image, setImage] = useState<File[]>([]);
+  const [imageElement, setImageElement] = useState<HTMLImageElement>();
+  const onDrop = useCallback(
+    (acceptedFiles: File[], rejectedFiles: any, event: DropEvent) => {
+      console.log("Event", event);
+      const imageElement = document.createElement("img");
+      imageElement.src = "../../public/nutrifit-logo.jpg";
+      setImage(acceptedFiles);
+      setImageElement(imageElement);
+    },
+    []
+  );
 
-  const onDrop = useCallback((acceptedFiles: any[], rejectedFiles: any) => {
-    acceptedFiles.forEach((file: File) => {
-      setImage((prevState) => [...prevState, file] as any);
-      console.log("Image", file);
-    });
-  }, []);
   const imageStyle = { width: "500px", height: "500px" };
 
   const AnalyzeImage = useCallback(() => {
-    console.log("Image***", image);
+    //const form_data = new FormData();
+    // form_data.append("file", fs.createReadStream(image[0] as any).path);
+    // console.log("Image***", (image[0] as any).path);
+    // console.log("Form Data", image[0]);
     axios
-      .post("http://localhost:3001/api/analyze", { ...image })
+      .post("http://localhost:3001/api/analyze", image[0])
       .then((res) => {
         console.log("Response", res);
       })
