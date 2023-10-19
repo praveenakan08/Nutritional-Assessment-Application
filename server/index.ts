@@ -74,7 +74,7 @@ app.post(`/api/analyze`,async (req,res)=>{
 
   //const file=new File(image,'./models/model.json');
   //const blob =URL.createObjectURL(image[0]);
-  const modelPath = './models/ML_MODEL/model.json';
+  const modelPath = './models/ML_Model/model.json';
   const handler = tfn.io.fileSystem(modelPath);
   const model = await tfn.loadLayersModel(handler);
   console.log("model",model);
