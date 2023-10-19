@@ -63,7 +63,7 @@ var UploadImage = function () {
                 react_1["default"].createElement(material_1.Box, { paddingTop: 45 },
                     react_1["default"].createElement("label", { htmlFor: "upload-photo" },
                         react_1["default"].createElement("input", { style: { display: "none" }, id: "upload-photo", name: "upload-photo", type: "file", onChange: handleChange }),
-                        react_1["default"].createElement(material_1.Button, { sx: { bgcolor: "#26672D" }, variant: "contained", component: "span", startIcon: react_1["default"].createElement(material_1.Avatar, { src: '/upload-file.png' }) },
+                        react_1["default"].createElement(material_1.Button, { sx: { bgcolor: "#26672D" }, variant: "contained", component: "span", startIcon: react_1["default"].createElement(material_1.Avatar, { src: '/upload-file-white.png' }) },
                             react_1["default"].createElement(material_1.Typography, null, "Select from Computer")))))),
             react_1["default"].createElement("div", { style: { display: "flex", justifyContent: "center", marginTop: 10 } }, image.length > 0 && (react_1["default"].createElement(material_1.Button, { variant: "contained", color: "success", style: { borderRadius: "6px" }, size: "large", onClick: function () { return AnalyzeImage(); } },
                 react_1["default"].createElement(material_1.Typography, null, "Analyze")))))));

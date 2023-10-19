@@ -47,6 +47,7 @@ const Login = (): JSX.Element => {
     axios
       .get(`http://localhost:3001/register?email=${email}`)
       .then((result: any) => {
+        localStorage.setItem("email", email || '')
         console.log("Login Result", result);
       })
       .catch((err: any) => {

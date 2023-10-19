@@ -1,15 +1,16 @@
 import {
+  Box,
   Button,
+  FormLabel,
   Grid,
+  TextField,
   ThemeProvider,
   Typography,
   createTheme,
 } from "@mui/material";
 import CommonNavBar from "../Components/CommonNavBar";
-import { useState } from "react";
 import axios from "axios";
-import { error } from "console";
-
+import { useState } from "react";
 const theme = createTheme({
   palette: {
     background: {
@@ -30,30 +31,80 @@ const theme = createTheme({
 
 const ViewProfile = (): JSX.Element => {
   const [user, setUser] = useState();
-  const email = 'abc@gmail.com'
-  const userDetails = axios
-    .get("http://localhost:3001/api/viewProfile", email as any)
-    .then(res => setUser(res.data))
-    .then()
+  const email = localStorage.getItem("email")
+  axios.get(`http://localhost:3001/register?email=${email}`)
+  .then((result: any) => {
+    if (!result){
+      setUser(result)
+    }
+    console.log("User!!!!", result);
+  })
+  .catch((err: any) => {
+    console.log(err);
+  });
   
   return (
     <ThemeProvider theme={theme}>
       <CommonNavBar></CommonNavBar>
-      {/* <Grid>
-            <Typography>Email : {user.email}</Typography>
-            <Typography>Age : {user.email} </Typography>
-            <Typography>Gender : {user.gender}</Typography>
-            <Typography>Height : {user.height}</Typography>
-            <Typography>Weight : {user.weight}</Typography>
-          <Button
-            variant="contained"
-            color="success"
-            size="large"
-            type="submit"
-          >
-            Edit Profile
-          </Button>
-      </Grid> */}
+      <Grid alignItems="center" spacing={3}>
+            <Grid item>
+              <FormLabel id="name">Name</FormLabel>
+              <TextField
+                fullWidth
+                value= {user?.name}
+              />
+            </Grid>
+            <Grid item>
+              <FormLabel id="email">Email</FormLabel>
+              <TextField
+                fullWidth
+                // placeholder="Enter your Email"
+                value="sdfaf"
+                // {email}
+              />
+            </Grid>
+            <Grid item>
+              <FormLabel id="age">Age</FormLabel>
+              <TextField
+                fullWidth
+                // placeholder="Enter your age"
+                type="number"
+                value="23"
+                // {age}
+              />
+            </Grid>
+            <Grid item>
+              <FormLabel id="height">Height</FormLabel>
+              <TextField
+                fullWidth
+                placeholder="Enter your height"
+                id="height"
+                // required={true}
+                value="23"
+              />
+            </Grid>
+            <Grid item>
+              <FormLabel id="weight">Weight</FormLabel>
+              <TextField
+                fullWidth
+                placeholder="Enter your weight"
+                id="weight"
+                // required={true}
+                value="45"
+              />  
+            </Grid>
+            <Grid item style={{textAlign:'center'}}>
+              <Button
+                variant="contained"
+                color="success"
+                size="large"
+                type="submit"
+              >
+                Edit Profile
+              </Button>
+
+            </Grid>
+          </Grid>
     </ThemeProvider>
   );
 };
