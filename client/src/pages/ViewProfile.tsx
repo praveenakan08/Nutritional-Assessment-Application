@@ -47,124 +47,77 @@ const ViewProfile = (): JSX.Element => {
   });
 
   return (
-    <div
-      className="register-page"
-      style={{ width: "100%", display: "flex", justifyContent: "center" }}
-    >
-      <ThemeProvider theme={theme}>
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-            boxShadow: 1,
-            borderRadius: 2,
-            p: 2,
-            marginTop: 2,
-            marginBottom: 2,
-            justifyItems: "center",
-            width: 500,
-          }}
-        >
-          <form>
-            <Grid container alignItems="center" spacing={3}>
-              <Grid item xs={12}>
-                <Box sx={{ bgcolor: "#1b5e20" }}>
-                  <Typography
-                    variant="h3"
-                    component="h3"
-                    color="white"
-                    display={"flex"}
-                    justifyContent={"center"}
-                  >
-                    <img
-                      src="/nutrifit-logo.png"
-                      height={60}
-                      width={60}
-                      alt="Logo"
-                    />
-                    <Box sx={{ paddingLeft: "4px" }}>NutriFit</Box>
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={12}>
-                <FormLabel id="name">Name</FormLabel>
-                <TextField
-                  fullWidth
-                  placeholder="Enter your Name"
-                  value={user?.name}
-                  required={true}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormLabel id="email">Email</FormLabel>
-                <TextField
-                  fullWidth
-                  placeholder="Enter your Email"
-                  value={user?.email}
-                  required={true}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <FormLabel id="age">Age</FormLabel>
-                <TextField
-                  fullWidth
-                  placeholder="Enter your age"
-                  type="number"
-                  value={user?.age}
-                  required={true}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <FormLabel id="gender">Gender</FormLabel>
-                <RadioGroup row aria-label="gender" name="gender">
-                  <FormControlLabel
-                    value="female"
-                    control={<Radio />}
-                    label="Female"
-                    checked={user?.gender === "female"}
-                  />
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="Male"
-                    checked={user?.gender === "male"}
-                  />
-                </RadioGroup>
-              </Grid>
-              <Grid item xs={6}>
-                <FormLabel id="height">Height</FormLabel>
-                <TextField
-                  fullWidth
-                  placeholder="Enter your height"
-                  id="height"
-                  required={true}
-                  value={user?.height}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <FormLabel id="weight">Weight</FormLabel>
-                <TextField
-                  fullWidth
-                  placeholder="Enter your weight"
-                  id="weight"
-                  required={true}
-                  value={user?.weight}
-                />
-              </Grid>
-              <Grid item xs={12} style={{ textAlign: "center" }}>
-                <Button
-                  variant="contained"
-                  color="success"
-                  size="large"
-                  type="submit"
-                >
-                  Edit
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-        </Box>
-      </ThemeProvider>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CommonNavBar></CommonNavBar>
+      <Box
+        sx={{
+          bgcolor: "background.paper",
+          boxShadow: 1,
+          borderRadius: 2,
+          p: 2,
+          marginTop: 14,
+          marginBottom: 2,
+          justifyItems: "center",
+          width: 500,
+        }}
+      >
+        <Grid alignItems="center" spacing={3}>
+          <Grid item>
+            <FormLabel id="name">Name</FormLabel>
+            <TextField fullWidth value="Mansi" />
+          </Grid>
+          <Grid item>
+            <FormLabel id="email">Email</FormLabel>
+            <TextField
+              fullWidth
+              // placeholder="Enter your Email"
+              value="mansi.rathi@gmail.com"
+              // {email}
+            />
+          </Grid>
+          <Grid item>
+            <FormLabel id="age">Age</FormLabel>
+            <TextField
+              fullWidth
+              // placeholder="Enter your age"
+              type="number"
+              value="23"
+              // {age}
+            />
+          </Grid>
+          <Grid item>
+            <FormLabel id="height">Height</FormLabel>
+            <TextField
+              fullWidth
+              placeholder="Enter your height"
+              id="height"
+              // required={true}
+              value="5.1"
+            />
+          </Grid>
+          <Grid item>
+            <FormLabel id="weight">Weight</FormLabel>
+            <TextField
+              fullWidth
+              placeholder="Enter your weight"
+              id="weight"
+              // required={true}
+              value="45"
+            />
+          </Grid>
+          <Grid item style={{ textAlign: "center", paddingTop: 10 }}>
+            <Button
+              variant="contained"
+              color="success"
+              size="large"
+              type="submit"
+            >
+              Edit Profile
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+    </ThemeProvider>
   );
 };
 
