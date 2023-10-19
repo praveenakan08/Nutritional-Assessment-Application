@@ -1,14 +1,7 @@
-import {
-  Button,
-  Grid,
-  ThemeProvider,
-  Typography,
-  createTheme,
-} from "@mui/material";
-import CommonNavBar from "../Components/CommonNavBar";
+import { ThemeProvider, createTheme } from "@mui/material";
+import CommonNavBar from "../components/CommonNavBar";
 import { useState } from "react";
 import axios from "axios";
-import { error } from "console";
 
 const theme = createTheme({
   palette: {
@@ -30,12 +23,12 @@ const theme = createTheme({
 
 const ViewProfile = (): JSX.Element => {
   const [user, setUser] = useState();
-  const email = 'abc@gmail.com'
+  const email = "abc@gmail.com";
   const userDetails = axios
     .get("http://localhost:3001/api/viewProfile", email as any)
-    .then(res => setUser(res.data))
-    .then()
-  
+    .then((res) => setUser(res.data))
+    .then();
+
   return (
     <ThemeProvider theme={theme}>
       <CommonNavBar></CommonNavBar>

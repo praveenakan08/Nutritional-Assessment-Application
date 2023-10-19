@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Grid,
@@ -27,9 +27,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: [
-      'tinos',
-    ].join(','),
+    fontFamily: ["tinos"].join(","),
   },
 });
 
@@ -110,12 +108,12 @@ const Login = (): JSX.Element => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} style={{textAlign:'center'}}>
+            <Grid item xs={12} style={{ textAlign: "center" }}>
               <Button variant="contained" color="success" size="large">
                 Login
               </Button>
             </Grid>
-            <Grid item xs={12} style={{textAlign:'center'}}>
+            <Grid item xs={12} style={{ textAlign: "center" }}>
               <Link to="/register">New user? Sign up Here!</Link>
             </Grid>
           </Grid>
