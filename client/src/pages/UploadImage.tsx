@@ -121,6 +121,25 @@ const UploadImage = (): JSX.Element => {
               <Typography>Analyze</Typography>
             </Button>
           )}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: 10,
+            }}
+          >
+            {image.length > 0 && (
+              <Button
+                variant="contained"
+                color="success"
+                style={{ borderRadius: "6px" }}
+                size="large"
+                onClick={() => AnalyzeImage()}
+              >
+                <Typography>Analyze</Typography>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>

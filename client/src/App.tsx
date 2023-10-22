@@ -7,7 +7,7 @@ import UploadImage from "./pages/UploadImage";
 import AnalyzeImage from "./pages/AnalyzeImage";
 import ViewProfile from "./pages/ViewProfile";
 import CommonNavBar from "./components/CommonNavBar";
-import { ThemeProvider } from "@mui/material";
+import { ThemeProvider } from "@emotion/react";
 import { theme } from "./common/theme";
 
 const AppLayout = () => (
