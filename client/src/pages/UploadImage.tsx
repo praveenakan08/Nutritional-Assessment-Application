@@ -122,6 +122,7 @@ const UploadImage = (): JSX.Element => {
                       variant="contained"
                       component="span"
                       startIcon={<Avatar src={"/upload-file-white.png"} />}
+                      //onClick={handleChange}
                     >
                       <Typography>Select from Computer</Typography>
                     </Button>

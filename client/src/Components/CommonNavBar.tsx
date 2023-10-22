@@ -118,15 +118,17 @@ const CommonNavBar = (props: any): JSX.Element => {
             <Divider />
             <List>
               {["Logout"].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton>
-                    <ListItemText
-                      primary={text}
-                      primaryTypographyProps={{ fontSize: "21px" }}
-                      sx={{ textAlign: "center" }}
-                    />
-                  </ListItemButton>
-                </ListItem>
+                <Link href="/login" style={{ color: "#FFF" }}>
+                  <ListItem key={text} disablePadding>
+                    <ListItemButton>
+                      <ListItemText
+                        primary={text}
+                        primaryTypographyProps={{ fontSize: "21px" }}
+                        sx={{ textAlign: "center" }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
               ))}
             </List>
           </Drawer>
