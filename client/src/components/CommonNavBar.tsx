@@ -36,8 +36,8 @@ const theme = createTheme({
   typography: {
     fontFamily: ["tinos"].join(","),
     button: {
-      textTransform: 'none',
-    }
+      textTransform: "none",
+    },
   },
 });
 
@@ -85,10 +85,13 @@ const CommonNavBar = (): JSX.Element => {
                 src="/profile-image.png"
                 sx={{ width: 75, height: 75 }}
               />
-              <Button variant="text" sx={{color:"#ffffff"}} component={Link} href="/viewProfile">
-                <Typography>
-                  Your Profile
-                </Typography>
+              <Button
+                variant="text"
+                sx={{ color: "#ffffff" }}
+                component={Link}
+                href="/viewProfile"
+              >
+                <Typography>Your Profile</Typography>
               </Button>
             </Grid>
 
@@ -115,15 +118,17 @@ const CommonNavBar = (): JSX.Element => {
             <Divider />
             <List>
               {["Logout"].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton>
-                    <ListItemText
-                      primary={text}
-                      primaryTypographyProps={{ fontSize: "21px" }}
-                      sx={{ textAlign: "center" }}
-                    />
-                  </ListItemButton>
-                </ListItem>
+                <Link href="/login" style={{ color: "#FFF" }}>
+                  <ListItem key={text} disablePadding>
+                    <ListItemButton>
+                      <ListItemText
+                        primary={text}
+                        primaryTypographyProps={{ fontSize: "21px" }}
+                        sx={{ textAlign: "center" }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
               ))}
             </List>
           </Drawer>

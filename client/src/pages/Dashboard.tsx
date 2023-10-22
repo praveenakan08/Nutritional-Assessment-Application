@@ -32,7 +32,7 @@ const theme = createTheme({
 const Dashboard = (): JSX.Element => {
   return (
     <ThemeProvider theme={theme}>
-      <CommonNavBar></CommonNavBar>
+      <CommonNavBar />
       <Grid container paddingTop={20} paddingLeft={25} columnGap={4}>
         <Card>
           <CardActionArea component={Link} href="/uploadImage">
@@ -49,7 +49,7 @@ const Dashboard = (): JSX.Element => {
           </CardActionArea>
         </Card>
         <Card>
-          <CardActionArea>
+          <CardActionArea component={Link} href="/analyzeImage">
             <CardMedia
               component="img"
               image="/view-assessment-history.png"

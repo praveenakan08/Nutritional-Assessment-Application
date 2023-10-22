@@ -77,7 +77,6 @@ const UploadImage = (): JSX.Element => {
 
   return (
     <ThemeProvider theme={theme}>
-      <CommonNavBar></CommonNavBar>
       <div
         className="register-page"
         style={{ width: "100%", display: "flex", justifyContent: "center" }}
@@ -122,6 +121,7 @@ const UploadImage = (): JSX.Element => {
                     variant="contained"
                     component="span"
                     startIcon={<Avatar src={"/upload-file-white.png"} />}
+                    //onClick={handleChange}
                   >
                     <Typography>Select from Computer</Typography>
                   </Button>
@@ -130,7 +130,11 @@ const UploadImage = (): JSX.Element => {
             </Grid>
           )}
           <div
-            style={{ display: "flex", justifyContent: "center", marginTop: 10 }}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: 10,
+            }}
           >
             {image.length > 0 && (
               <Button

@@ -52,6 +52,7 @@ const Login = (): JSX.Element => {
       .then((result: any) => {
         console.log("Login Result", result);
         if (result.data.status === 200) {
+          localStorage.setItem("email", email || "");
           history("/dashboard");
         } else if (result.data.status === 403) {
           alert("Wrong password!Try again");
@@ -138,7 +139,12 @@ const Login = (): JSX.Element => {
                   />
                 </Grid>
                 <Grid item xs={12} style={{ textAlign: "center" }}>
-                  <Button variant="contained" color="success" size="large">
+                  <Button
+                    variant="contained"
+                    color="success"
+                    size="large"
+                    type="submit"
+                  >
                     Login
                   </Button>
                 </Grid>
