@@ -139,7 +139,12 @@ const Login = (): JSX.Element => {
                   />
                 </Grid>
                 <Grid item xs={12} style={{ textAlign: "center" }}>
-                  <Button variant="contained" color="success" size="large">
+                  <Button
+                    variant="contained"
+                    color="success"
+                    size="large"
+                    type="submit"
+                  >
                     Login
                   </Button>
                 </Grid>
