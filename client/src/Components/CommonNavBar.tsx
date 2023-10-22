@@ -41,7 +41,7 @@ const theme = createTheme({
   },
 });
 
-const CommonNavBar = (props: any): JSX.Element => {
+const CommonNavBar = (): JSX.Element => {
   return (
     <ThemeProvider theme={theme}>
       <AppBar
@@ -134,7 +134,6 @@ const CommonNavBar = (props: any): JSX.Element => {
           </Drawer>
         </Box>
       </Grid>
-      {props.children}
     </ThemeProvider>
   );
 };

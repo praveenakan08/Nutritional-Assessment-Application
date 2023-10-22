@@ -49,7 +49,7 @@ const Dashboard = (): JSX.Element => {
           </CardActionArea>
         </Card>
         <Card>
-          <CardActionArea>
+          <CardActionArea component={Link} href="/analyzeImage">
             <CardMedia
               component="img"
               image="/view-assessment-history.png"
