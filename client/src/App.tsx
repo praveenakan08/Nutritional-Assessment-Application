@@ -7,6 +7,8 @@ import UploadImage from "./pages/UploadImage";
 import AnalyzeImage from "./pages/AnalyzeImage";
 import ViewProfile from "./pages/ViewProfile";
 import CommonNavBar from "./components/CommonNavBar";
+import { ThemeProvider } from "@mui/material";
+import { theme } from "./common/theme";
 
 const AppLayout = () => (
   <>
@@ -19,7 +21,7 @@ const AppLayout = () => (
 
 const App = (): JSX.Element => {
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Routes>
         <Route path="/" element={<Register />} />
         <Route path="/register" element={<Register />} />
@@ -31,7 +33,7 @@ const App = (): JSX.Element => {
           <Route path="/viewProfile" element={<ViewProfile />} />
         </Route>
       </Routes>
-    </>
+    </ThemeProvider>
   );
 };
 

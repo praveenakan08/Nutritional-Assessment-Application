@@ -9,30 +9,10 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
-  createTheme,
-  ThemeProvider,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-
-const theme = createTheme({
-  palette: {
-    background: {
-      paper: "#fff",
-    },
-    text: {
-      primary: "#173A5E",
-      secondary: "#46505A",
-    },
-    action: {
-      active: "#001E3C",
-    },
-  },
-  typography: {
-    fontFamily: ["tinos"].join(","),
-  },
-});
 
 const Register = (): JSX.Element => {
   const history = useNavigate();
@@ -82,141 +62,139 @@ const Register = (): JSX.Element => {
       className="register-page"
       style={{ width: "100%", display: "flex", justifyContent: "center" }}
     >
-      <ThemeProvider theme={theme}>
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-            boxShadow: 1,
-            borderRadius: 2,
-            p: 2,
-            marginTop: 2,
-            marginBottom: 2,
-            justifyItems: "center",
-            width: 500,
-          }}
-        >
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid container alignItems="center" spacing={3}>
-              <Grid item xs={12}>
-                <Box sx={{ bgcolor: "#1b5e20" }}>
-                  <Typography
-                    variant="h3"
-                    component="h3"
-                    color="white"
-                    display={"flex"}
-                    justifyContent={"center"}
-                  >
-                    <img
-                      src="/nutrifit-logo.png"
-                      height={60}
-                      width={60}
-                      alt="Logo"
-                    />
-                    <Box sx={{ paddingLeft: "4px" }}>NutriFit</Box>
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={12}>
-                <FormLabel id="name">Name</FormLabel>
-                <TextField
-                  fullWidth
-                  placeholder="Enter your Name"
-                  value={name}
-                  required={true}
-                  error={!(name.length > 0)}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormLabel id="email">Email</FormLabel>
-                <TextField
-                  fullWidth
-                  placeholder="Enter your Email"
-                  value={email}
-                  required={true}
-                  error={!email.includes("@gmail.com")}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <FormLabel id="age">Age</FormLabel>
-                <TextField
-                  fullWidth
-                  placeholder="Enter your age"
-                  type="number"
-                  value={age}
-                  required={true}
-                  error={!(age > 0)}
-                  onChange={(e) => setAge(parseInt(e.target.value))}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <FormLabel id="gender">Gender</FormLabel>
-                <RadioGroup row aria-label="gender" name="gender">
-                  <FormControlLabel
-                    value="female"
-                    control={<Radio />}
-                    label="Female"
-                    onChange={(e) => setGender("Female")}
-                  />
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="Male"
-                    onChange={(e) => setGender("Male")}
-                  />
-                </RadioGroup>
-              </Grid>
-              <Grid item xs={6}>
-                <FormLabel id="height">Height</FormLabel>
-                <TextField
-                  fullWidth
-                  placeholder="Enter your height"
-                  id="height"
-                  required={true}
-                  error={height == null}
-                  onChange={(e) => setHeight(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <FormLabel id="weight">Weight</FormLabel>
-                <TextField
-                  fullWidth
-                  placeholder="Enter your weight"
-                  id="weight"
-                  required={true}
-                  error={weight == null}
-                  onChange={(e) => setWeight(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormLabel id="password">Password</FormLabel>
-                <TextField
-                  fullWidth
-                  placeholder="Create your password"
-                  type="password"
-                  required={true}
-                  error={!(password.length > 6)}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} style={{ textAlign: "center" }}>
-                <Button
-                  variant="contained"
-                  color="success"
-                  size="large"
-                  type="submit"
+      <Box
+        sx={{
+          bgcolor: "background.paper",
+          boxShadow: 1,
+          borderRadius: 2,
+          p: 2,
+          marginTop: 2,
+          marginBottom: 2,
+          justifyItems: "center",
+          width: 500,
+        }}
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container alignItems="center" spacing={3}>
+            <Grid item xs={12}>
+              <Box sx={{ bgcolor: "#1b5e20" }}>
+                <Typography
+                  variant="h3"
+                  component="h3"
+                  color="white"
+                  display={"flex"}
+                  justifyContent={"center"}
                 >
-                  Register
-                </Button>
-              </Grid>
-              <Grid item xs={12} style={{ textAlign: "center" }}>
-                <Link to="/login">Already Registered? Login Here!</Link>
-              </Grid>
+                  <img
+                    src="/nutrifit-logo.png"
+                    height={60}
+                    width={60}
+                    alt="Logo"
+                  />
+                  <Box sx={{ paddingLeft: "4px" }}>NutriFit</Box>
+                </Typography>
+              </Box>
             </Grid>
-          </form>
-        </Box>
-      </ThemeProvider>
+            <Grid item xs={12}>
+              <FormLabel id="name">Name</FormLabel>
+              <TextField
+                fullWidth
+                placeholder="Enter your Name"
+                value={name}
+                required={true}
+                error={!(name.length > 0)}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormLabel id="email">Email</FormLabel>
+              <TextField
+                fullWidth
+                placeholder="Enter your Email"
+                value={email}
+                required={true}
+                error={!email.includes("@gmail.com")}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <FormLabel id="age">Age</FormLabel>
+              <TextField
+                fullWidth
+                placeholder="Enter your age"
+                type="number"
+                value={age}
+                required={true}
+                error={!(age > 0)}
+                onChange={(e) => setAge(parseInt(e.target.value))}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <FormLabel id="gender">Gender</FormLabel>
+              <RadioGroup row aria-label="gender" name="gender">
+                <FormControlLabel
+                  value="female"
+                  control={<Radio />}
+                  label="Female"
+                  onChange={(e) => setGender("Female")}
+                />
+                <FormControlLabel
+                  value="male"
+                  control={<Radio />}
+                  label="Male"
+                  onChange={(e) => setGender("Male")}
+                />
+              </RadioGroup>
+            </Grid>
+            <Grid item xs={6}>
+              <FormLabel id="height">Height</FormLabel>
+              <TextField
+                fullWidth
+                placeholder="Enter your height"
+                id="height"
+                required={true}
+                error={height == null}
+                onChange={(e) => setHeight(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <FormLabel id="weight">Weight</FormLabel>
+              <TextField
+                fullWidth
+                placeholder="Enter your weight"
+                id="weight"
+                required={true}
+                error={weight == null}
+                onChange={(e) => setWeight(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormLabel id="password">Password</FormLabel>
+              <TextField
+                fullWidth
+                placeholder="Create your password"
+                type="password"
+                required={true}
+                error={!(password.length > 6)}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} style={{ textAlign: "center" }}>
+              <Button
+                variant="contained"
+                color="success"
+                size="large"
+                type="submit"
+              >
+                Register
+              </Button>
+            </Grid>
+            <Grid item xs={12} style={{ textAlign: "center" }}>
+              <Link to="/login">Already Registered? Login Here!</Link>
+            </Grid>
+          </Grid>
+        </form>
+      </Box>
     </div>
   );
 };

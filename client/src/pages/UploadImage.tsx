@@ -5,14 +5,11 @@ import {
   Button,
   Divider,
   Grid,
-  ThemeProvider,
   Typography,
-  createTheme,
   CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 import Dropzone from "../components/Dropzone";
-import CommonNavBar from "../components/CommonNavBar";
 
 const UploadImage = (): JSX.Element => {
   const [image, setImage] = useState<File[]>([]);
@@ -53,104 +50,80 @@ const UploadImage = (): JSX.Element => {
       });
   }, [image]);
 
-  const theme = createTheme({
-    palette: {
-      background: {
-        paper: "#fff",
-      },
-      text: {
-        primary: "#173A5E",
-        secondary: "#46505A",
-      },
-      action: {
-        active: "#001E3C",
-      },
-    },
-    typography: {
-      fontFamily: ["tinos"].join(","),
-      fontSize: 15,
-      button: {
-        textTransform: "none",
-      },
-    },
-  });
-
   return (
-    <ThemeProvider theme={theme}>
-      <div
-        className="register-page"
-        style={{ width: "100%", display: "flex", justifyContent: "center" }}
-      >
-        {loader && <CircularProgress color="success" size={10} />}
-        <div>
-          {image.length > 0 ? (
-            image.map((image, index) => (
-              <Box sx={{ marginTop: 10 }}>
-                <img
-                  style={imageStyle}
-                  src={`${URL.createObjectURL(image)}`}
-                  key={index}
-                  alt=""
-                />
-              </Box>
-            ))
-          ) : (
-            <Grid container xs={12} columnGap={4}>
-              <Box paddingLeft={20} paddingTop={4}>
-                <Dropzone onDrop={onDrop} accept={"image/*"} />
-              </Box>
+    <div
+      className="register-page"
+      style={{ width: "100%", display: "flex", justifyContent: "center" }}
+    >
+      {loader && <CircularProgress color="success" size={10} />}
+      <div>
+        {image.length > 0 ? (
+          image.map((image, index) => (
+            <Box sx={{ marginTop: 10 }}>
+              <img
+                style={imageStyle}
+                src={`${URL.createObjectURL(image)}`}
+                key={index}
+                alt=""
+              />
+            </Box>
+          ))
+        ) : (
+          <Grid container xs={12} columnGap={4}>
+            <Box paddingLeft={20} paddingTop={4}>
+              <Dropzone onDrop={onDrop} accept={"image/*"} />
+            </Box>
 
-              <Grid marginTop={28}>
-                <Divider
-                  orientation="vertical"
-                  style={{ height: "100%", backgroundColor: "#26672D" }}
-                />
-              </Grid>
-
-              <Box paddingTop={45}>
-                <label htmlFor="upload-photo">
-                  <input
-                    style={{ display: "none" }}
-                    id="upload-photo"
-                    name="upload-photo"
-                    type="file"
-                    onChange={handleChange}
-                  />
-                  <Button
-                    sx={{ bgcolor: "#26672D" }}
-                    variant="contained"
-                    component="span"
-                    startIcon={<Avatar src={"/upload-file-white.png"} />}
-                    //onClick={handleChange}
-                  >
-                    <Typography>Select from Computer</Typography>
-                  </Button>
-                </label>
-              </Box>
+            <Grid marginTop={28}>
+              <Divider
+                orientation="vertical"
+                style={{ height: "100%", backgroundColor: "#26672D" }}
+              />
             </Grid>
+
+            <Box paddingTop={45}>
+              <label htmlFor="upload-photo">
+                <input
+                  style={{ display: "none" }}
+                  id="upload-photo"
+                  name="upload-photo"
+                  type="file"
+                  onChange={handleChange}
+                />
+                <Button
+                  sx={{ bgcolor: "#26672D" }}
+                  variant="contained"
+                  component="span"
+                  startIcon={<Avatar src={"/upload-file-white.png"} />}
+                  //onClick={handleChange}
+                >
+                  <Typography>Select from Computer</Typography>
+                </Button>
+              </label>
+            </Box>
+          </Grid>
+        )}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: 10,
+          }}
+        >
+          {image.length > 0 && (
+            <Button
+              variant="contained"
+              color="success"
+              style={{ borderRadius: "6px" }}
+              size="large"
+              onClick={() => AnalyzeImage()}
+            >
+              <Typography>Analyze</Typography>
+            </Button>
           )}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: 10,
-            }}
-          >
-            {image.length > 0 && (
-              <Button
-                variant="contained"
-                color="success"
-                style={{ borderRadius: "6px" }}
-                size="large"
-                onClick={() => AnalyzeImage()}
-              >
-                <Typography>Analyze</Typography>
-              </Button>
-            )}
-          </div>
         </div>
       </div>
-    </ThemeProvider>
+    </div>
   );
 };
 export default UploadImage;

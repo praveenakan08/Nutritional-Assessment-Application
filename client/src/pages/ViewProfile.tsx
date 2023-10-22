@@ -1,6 +1,4 @@
 import {
-  ThemeProvider,
-  createTheme,
   Box,
   Grid,
   Typography,
@@ -11,27 +9,9 @@ import {
   FormControlLabel,
   Radio,
 } from "@mui/material";
-import CommonNavBar from "../components/CommonNavBar";
+
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-const theme = createTheme({
-  palette: {
-    background: {
-      paper: "#fff",
-    },
-    text: {
-      primary: "#173A5E",
-      secondary: "#46505A",
-    },
-    action: {
-      active: "#001E3C",
-    },
-  },
-  typography: {
-    fontFamily: ["tinos"].join(","),
-  },
-});
 
 const ViewProfile = (): JSX.Element => {
   const [user, setUser] = useState<any>();
@@ -47,77 +27,74 @@ const ViewProfile = (): JSX.Element => {
   });
 
   return (
-    <ThemeProvider theme={theme}>
-      <CommonNavBar></CommonNavBar>
-      <Box
-        sx={{
-          bgcolor: "background.paper",
-          boxShadow: 1,
-          borderRadius: 2,
-          p: 2,
-          marginTop: 14,
-          marginBottom: 2,
-          justifyItems: "center",
-          width: 500,
-        }}
-      >
-        <Grid alignItems="center" spacing={3}>
-          <Grid item>
-            <FormLabel id="name">Name</FormLabel>
-            <TextField fullWidth value="Mansi" />
-          </Grid>
-          <Grid item>
-            <FormLabel id="email">Email</FormLabel>
-            <TextField
-              fullWidth
-              // placeholder="Enter your Email"
-              value="mansi.rathi@gmail.com"
-              // {email}
-            />
-          </Grid>
-          <Grid item>
-            <FormLabel id="age">Age</FormLabel>
-            <TextField
-              fullWidth
-              // placeholder="Enter your age"
-              type="number"
-              value="23"
-              // {age}
-            />
-          </Grid>
-          <Grid item>
-            <FormLabel id="height">Height</FormLabel>
-            <TextField
-              fullWidth
-              placeholder="Enter your height"
-              id="height"
-              // required={true}
-              value="5.1"
-            />
-          </Grid>
-          <Grid item>
-            <FormLabel id="weight">Weight</FormLabel>
-            <TextField
-              fullWidth
-              placeholder="Enter your weight"
-              id="weight"
-              // required={true}
-              value="45"
-            />
-          </Grid>
-          <Grid item style={{ textAlign: "center", paddingTop: 10 }}>
-            <Button
-              variant="contained"
-              color="success"
-              size="large"
-              type="submit"
-            >
-              Edit Profile
-            </Button>
-          </Grid>
+    <Box
+      sx={{
+        bgcolor: "background.paper",
+        boxShadow: 1,
+        borderRadius: 2,
+        p: 2,
+        marginTop: 14,
+        marginBottom: 2,
+        justifyItems: "center",
+        width: 500,
+      }}
+    >
+      <Grid alignItems="center" spacing={3}>
+        <Grid item>
+          <FormLabel id="name">Name</FormLabel>
+          <TextField fullWidth value="Mansi" />
         </Grid>
-      </Box>
-    </ThemeProvider>
+        <Grid item>
+          <FormLabel id="email">Email</FormLabel>
+          <TextField
+            fullWidth
+            // placeholder="Enter your Email"
+            value="mansi.rathi@gmail.com"
+            // {email}
+          />
+        </Grid>
+        <Grid item>
+          <FormLabel id="age">Age</FormLabel>
+          <TextField
+            fullWidth
+            // placeholder="Enter your age"
+            type="number"
+            value="23"
+            // {age}
+          />
+        </Grid>
+        <Grid item>
+          <FormLabel id="height">Height</FormLabel>
+          <TextField
+            fullWidth
+            placeholder="Enter your height"
+            id="height"
+            // required={true}
+            value="5.1"
+          />
+        </Grid>
+        <Grid item>
+          <FormLabel id="weight">Weight</FormLabel>
+          <TextField
+            fullWidth
+            placeholder="Enter your weight"
+            id="weight"
+            // required={true}
+            value="45"
+          />
+        </Grid>
+        <Grid item style={{ textAlign: "center", paddingTop: 10 }}>
+          <Button
+            variant="contained"
+            color="success"
+            size="large"
+            type="submit"
+          >
+            Edit Profile
+          </Button>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
