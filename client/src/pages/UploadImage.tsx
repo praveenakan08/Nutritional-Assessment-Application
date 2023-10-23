@@ -6,7 +6,6 @@ import {
   Divider,
   Grid,
   Typography,
-  CircularProgress,
   FormLabel,
   Input,
 } from "@mui/material";
@@ -15,7 +14,6 @@ import Dropzone from "../components/Dropzone";
 
 const UploadImage = (): JSX.Element => {
   const [image, setImage] = useState<File[]>([]);
-  const [loader, setLoader] = useState<boolean>(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -23,12 +21,8 @@ const UploadImage = (): JSX.Element => {
     console.log("Hello!!", event.target.files[0]);
   };
 
-  const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any) => {
-    setLoader(true);
+  const onDrop = useCallback((acceptedFiles: File[]) => {
     setImage(acceptedFiles);
-    if (image) {
-      setLoader(false);
-    }
   }, []);
 
   const imageStyle = { width: "500px", height: "500px" };
@@ -49,7 +43,6 @@ const UploadImage = (): JSX.Element => {
       className="register-page"
       style={{ width: "100%", display: "flex", justifyContent: "center" }}
     >
-      {loader && <CircularProgress color="success" size={10} />}
       <>
         {image.length > 0 ? (
           image.map((image, index) => (

@@ -17,11 +17,7 @@ const Login = (): JSX.Element => {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
   const [loader, setLoader] = useState<boolean>(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { handleSubmit } = useForm();
 
   const onSubmit = (formInput: any) => {
     setLoader(true);
