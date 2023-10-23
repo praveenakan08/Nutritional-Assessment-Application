@@ -7,6 +7,8 @@ import {
   Grid,
   Typography,
   CircularProgress,
+  FormLabel,
+  Input,
 } from "@mui/material";
 import axios from "axios";
 import Dropzone from "../components/Dropzone";
@@ -43,12 +45,12 @@ const UploadImage = (): JSX.Element => {
   }, [image]);
 
   return (
-    <div
+    <Box
       className="register-page"
       style={{ width: "100%", display: "flex", justifyContent: "center" }}
     >
       {loader && <CircularProgress color="success" size={10} />}
-      <div>
+      <>
         {image.length > 0 ? (
           image.map((image, index) => (
             <Box sx={{ marginTop: 10 }}>
@@ -74,8 +76,8 @@ const UploadImage = (): JSX.Element => {
             </Grid>
 
             <Box paddingTop={45}>
-              <label htmlFor="upload-photo">
-                <input
+              <FormLabel htmlFor="upload-photo">
+                <Input
                   style={{ display: "none" }}
                   id="upload-photo"
                   name="upload-photo"
@@ -91,11 +93,11 @@ const UploadImage = (): JSX.Element => {
                 >
                   <Typography>Select from Computer</Typography>
                 </Button>
-              </label>
+              </FormLabel>
             </Box>
           </Grid>
         )}
-        <div
+        <Box
           style={{
             display: "flex",
             justifyContent: "center",
@@ -113,7 +115,7 @@ const UploadImage = (): JSX.Element => {
               <Typography>Analyze</Typography>
             </Button>
           )}
-          <div
+          <Box
             style={{
               display: "flex",
               justifyContent: "center",
@@ -131,10 +133,10 @@ const UploadImage = (): JSX.Element => {
                 <Typography>Analyze</Typography>
               </Button>
             )}
-          </div>
-        </div>
-      </div>
-    </div>
+          </Box>
+        </Box>
+      </>
+    </Box>
   );
 };
 export default UploadImage;

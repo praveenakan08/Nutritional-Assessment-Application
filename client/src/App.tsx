@@ -9,13 +9,14 @@ import ViewProfile from "./pages/ViewProfile";
 import CommonNavBar from "./components/CommonNavBar";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./common/theme";
+import { Box } from "@mui/material";
 
 const AppLayout = () => (
   <>
     <CommonNavBar />
-    <div>
+    <Box>
       <Outlet />
-    </div>
+    </Box>
   </>
 );
 

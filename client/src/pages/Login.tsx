@@ -50,7 +50,7 @@ const Login = (): JSX.Element => {
       });
   };
   return (
-    <div
+    <Box
       className="register-page"
       style={{
         width: "100%",
@@ -73,7 +73,7 @@ const Login = (): JSX.Element => {
       >
         {loader && <CircularProgress color="success" />}
         {!loader && (
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <Box onSubmit={handleSubmit(onSubmit)} component="form">
             <Grid container alignItems="center" spacing={3}>
               <Grid item xs={12}>
                 <Box sx={{ bgcolor: "#1b5e20" }}>
@@ -131,10 +131,10 @@ const Login = (): JSX.Element => {
                 <Link to="/register">New user? Sign up Here!</Link>
               </Grid>
             </Grid>
-          </form>
+          </Box>
         )}
       </Box>
-    </div>
+    </Box>
   );
 };
 
