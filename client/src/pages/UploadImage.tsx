@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import Dropzone from "../components/Dropzone";
+import API_URL from "..";
 
 const UploadImage = (): JSX.Element => {
   const [image, setImage] = useState<File>();
@@ -34,7 +35,7 @@ const UploadImage = (): JSX.Element => {
 
   const AnalyzeImage = useCallback(() => {
     axios
-      .post("http://localhost:3001/api/analyze", image)
+      .post(API_URL+"/analyze", image)
       .then((res) => {
         console.log("Response", res);
       })
