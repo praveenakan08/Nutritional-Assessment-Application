@@ -13,6 +13,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import API_URL from "..";
 
 const theme = createTheme({
   palette: {
@@ -47,7 +48,7 @@ const Login = (): JSX.Element => {
     setLoader(true);
     axios
       .get(
-        `http://localhost:3001/api/login?email=${email}&password=${password}`
+        API_URL+`/login?email=${email}&password=${password}`
       )
       .then((result: any) => {
         console.log("Login Result", result);

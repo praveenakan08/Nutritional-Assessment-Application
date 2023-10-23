@@ -10,6 +10,7 @@ import {
 import CommonNavBar from "../components/CommonNavBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import API_URL from "..";
 
 const theme = createTheme({
   palette: {
@@ -37,7 +38,7 @@ const ViewProfile = (): JSX.Element => {
     async function getUser() {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/viewProfile?email=${email}`
+          API_URL+`/viewProfile?email=${email}`
         );
         setUser(response.data);
       } catch (error) {
