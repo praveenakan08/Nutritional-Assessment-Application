@@ -12,39 +12,31 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import Dropzone from "../components/Dropzone";
-import CommonNavBar from "../components/CommonNavBar";
 
 const UploadImage = (): JSX.Element => {
-  const [image, setImage] = useState<File[]>([]);
+  const [image, setImage] = useState<File>();
   const [loader, setLoader] = useState<boolean>(false);
-  //const [imageElement, setImageElement] = useState<HTMLImageElement>();
-
+  
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
-    setImage(event.target.files[0] as any);
-    console.log("Hello!!", event.target.files[0]);
+    setImage(event.target.files[0] as File);
   };
 
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any) => {
-    // const imageElement = document.createElement("img");
-    // imageElement.src = "../../public/nutrifit-logo.jpg";
     setLoader(true);
-    setImage(acceptedFiles);
+    setImage(acceptedFiles[0]);
+    console.log("ACCEPTEDDD", acceptedFiles);
+
     if (image) {
       setLoader(false);
     }
-    //setImageElement(imageElement);
   }, []);
 
   const imageStyle = { width: "500px", height: "500px" };
 
   const AnalyzeImage = useCallback(() => {
-    //const form_data = new FormData();
-    // form_data.append("file", fs.createReadStream(image[0] as any).path);
-    // console.log("Image***", (image[0] as any).path);
-    // console.log("Form Data", image[0]);
     axios
-      .post("http://localhost:3001/api/analyze", image[0])
+      .post("http://localhost:3001/api/analyze", image)
       .then((res) => {
         console.log("Response", res);
       })
@@ -83,17 +75,14 @@ const UploadImage = (): JSX.Element => {
       >
         {loader && <CircularProgress color="success" size={10} />}
         <div>
-          {image.length > 0 ? (
-            image.map((image, index) => (
+          {image ? (
               <Box sx={{ marginTop: 10 }}>
                 <img
                   style={imageStyle}
                   src={`${URL.createObjectURL(image)}`}
-                  key={index}
                   alt=""
                 />
               </Box>
-            ))
           ) : (
             <Grid container xs={12} columnGap={4}>
               <Box paddingLeft={20} paddingTop={4}>
@@ -121,7 +110,6 @@ const UploadImage = (): JSX.Element => {
                     variant="contained"
                     component="span"
                     startIcon={<Avatar src={"/upload-file-white.png"} />}
-                    //onClick={handleChange}
                   >
                     <Typography>Select from Computer</Typography>
                   </Button>
@@ -136,7 +124,7 @@ const UploadImage = (): JSX.Element => {
               marginTop: 10,
             }}
           >
-            {image.length > 0 && (
+            {image && (
               <Button
                 variant="contained"
                 color="success"
