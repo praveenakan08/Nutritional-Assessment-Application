@@ -14,7 +14,6 @@ import Dropzone from "../components/Dropzone";
 const UploadImage = (): JSX.Element => {
   const [image, setImage] = useState<File[]>([]);
   const [loader, setLoader] = useState<boolean>(false);
-  //const [imageElement, setImageElement] = useState<HTMLImageElement>();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -23,23 +22,16 @@ const UploadImage = (): JSX.Element => {
   };
 
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any) => {
-    // const imageElement = document.createElement("img");
-    // imageElement.src = "../../public/nutrifit-logo.jpg";
     setLoader(true);
     setImage(acceptedFiles);
     if (image) {
       setLoader(false);
     }
-    //setImageElement(imageElement);
   }, []);
 
   const imageStyle = { width: "500px", height: "500px" };
 
   const AnalyzeImage = useCallback(() => {
-    //const form_data = new FormData();
-    // form_data.append("file", fs.createReadStream(image[0] as any).path);
-    // console.log("Image***", (image[0] as any).path);
-    // console.log("Form Data", image[0]);
     axios
       .post("http://localhost:3001/api/analyze", image[0])
       .then((res) => {

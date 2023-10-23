@@ -33,8 +33,6 @@ const Register = (): JSX.Element => {
   } = useForm();
 
   const onSubmit = (formInput: any) => {
-    // formInput.preventDefault();
-    // console.log("Form Input", formInput);
     axios
       .post("http://localhost:3001/api/register", {
         name,
