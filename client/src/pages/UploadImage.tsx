@@ -25,8 +25,6 @@ const UploadImage = (): JSX.Element => {
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any) => {
     setLoader(true);
     setImage(acceptedFiles[0]);
-    console.log("ACCEPTEDDD", acceptedFiles);
-
     if (image) {
       setLoader(false);
     }
