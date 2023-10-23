@@ -3,13 +3,9 @@ import {
   createTheme,
   Box,
   Grid,
-  Typography,
   FormLabel,
   TextField,
   Button,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
 } from "@mui/material";
 import CommonNavBar from "../components/CommonNavBar";
 import { useEffect, useState } from "react";
@@ -38,13 +34,18 @@ const ViewProfile = (): JSX.Element => {
   const email = localStorage.getItem("email");
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3001/api/viewProfile?${email}`)
-      .then((res) => setUser(res.data))
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  });
+    async function getUser() {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/api/viewProfile?email=${email}`
+        );
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    }
+    getUser();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -64,26 +65,15 @@ const ViewProfile = (): JSX.Element => {
         <Grid alignItems="center" spacing={3}>
           <Grid item>
             <FormLabel id="name">Name</FormLabel>
-            <TextField fullWidth value="Mansi" />
+            <TextField fullWidth value={user ? user.name : ""} />
           </Grid>
           <Grid item>
             <FormLabel id="email">Email</FormLabel>
-            <TextField
-              fullWidth
-              // placeholder="Enter your Email"
-              value="mansi.rathi@gmail.com"
-              // {email}
-            />
+            <TextField fullWidth value={user ? user.email : ""} />
           </Grid>
           <Grid item>
             <FormLabel id="age">Age</FormLabel>
-            <TextField
-              fullWidth
-              // placeholder="Enter your age"
-              type="number"
-              value="23"
-              // {age}
-            />
+            <TextField fullWidth type="number" value={user ? user.age : ""} />
           </Grid>
           <Grid item>
             <FormLabel id="height">Height</FormLabel>
@@ -91,8 +81,7 @@ const ViewProfile = (): JSX.Element => {
               fullWidth
               placeholder="Enter your height"
               id="height"
-              // required={true}
-              value="5.1"
+              value={user ? user.height : ""}
             />
           </Grid>
           <Grid item>
@@ -101,8 +90,7 @@ const ViewProfile = (): JSX.Element => {
               fullWidth
               placeholder="Enter your weight"
               id="weight"
-              // required={true}
-              value="45"
+              value={user ? user.weight : ""}
             />
           </Grid>
           <Grid item style={{ textAlign: "center", paddingTop: 10 }}>
