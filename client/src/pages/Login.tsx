@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import {
   TextField,
   Grid,
@@ -11,9 +12,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import API_URL from "..";
+import { login } from "../axiosCalls";
 
 const theme = createTheme({
   palette: {
@@ -35,41 +34,27 @@ const theme = createTheme({
 
 const Login = (): JSX.Element => {
   const history = useNavigate();
-  const [email, setEmail] = useState<string>();
-  const [password, setPassword] = useState<string>();
-  const [loader, setLoader] = useState<boolean>(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loader, setLoader] = useState(false);
 
-  const onSubmit = (formInput: any) => {
+  const { handleSubmit } = useForm();
+
+  const onSubmit = async () => {
     setLoader(true);
-    axios
-      .get(
-        API_URL+`/login?email=${email}&password=${password}`
-      )
-      .then((result: any) => {
-        console.log("Login Result", result);
-        if (result.data.status === 200) {
-          localStorage.setItem("email", email || "");
-          history("/dashboard");
-        } else if (result.data.status === 403) {
-          alert("Wrong password!Try again");
-        } else {
-          alert("Not registered");
-          history("/");
-        }
-        setLoader(false);
-      })
-      .catch((err: any) => {
-        alert("Not registered");
-        history("/");
-        setLoader(false);
-        console.log(err);
-      });
+    const result = await login({ email, password });
+
+    if (result.success) {
+      alert(result.message);
+      history("/dashboard");
+    } else {
+      alert(result.message);
+      history("/");
+    }
+
+    setLoader(false);
   };
+
   return (
     <div
       className="register-page"

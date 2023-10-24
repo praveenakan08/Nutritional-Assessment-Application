@@ -1,9 +1,8 @@
 import { ThemeProvider, createTheme, Box, Grid, Button } from "@mui/material";
 import CommonNavBar from "../components/CommonNavBar";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import API_URL from "..";
 import InputField from "../components/InputField";
+import { getUserDetails } from "../axiosCalls";
 
 const theme = createTheme({
   palette: {
@@ -28,19 +27,18 @@ const ViewProfile = (): JSX.Element => {
   const email = localStorage.getItem("email");
 
   useEffect(() => {
-    async function getUser() {
+    const getUser = async () => {
       try {
-        const response = await axios.get(
-          API_URL + `/viewProfile?email=${email}`
-        );
-        setUser(response.data);
+        const user = await getUserDetails({email});
+        setUser(user);
       } catch (error) {
-        console.error("Error fetching user:", error);
+        alert('User Fetch failed!');
       }
-    }
+    };
+  
     getUser();
-  }, []);
-
+  }, [email]);
+  
   return (
     <ThemeProvider theme={theme}>
       <CommonNavBar></CommonNavBar>

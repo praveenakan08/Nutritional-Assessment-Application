@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   TextField,
   Grid,
@@ -14,8 +14,7 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import API_URL from "..";
+import { registerUser } from "../axiosCalls";
 
 const theme = createTheme({
   palette: {
@@ -51,32 +50,24 @@ const Register = (): JSX.Element => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (formInput: any) => {
-    // formInput.preventDefault();
-    // console.log("Form Input", formInput);
-    axios
-      .post(API_URL+"/register", {
-        name,
-        email,
-        gender,
-        age,
-        height,
-        weight,
-        password,
-      })
-      .then((result: any) => {
-        console.log("Register Result", result);
-        if (result.data.status === 200) {
-          alert(result.data.message);
-          history("/login");
-        } else {
-          alert(result.data.message);
-          history("/");
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
+  const onSubmit = async (formInput: any) => {
+    const result = await registerUser({
+      name,
+      email,
+      gender,
+      age,
+      height,
+      weight,
+      password,
+    });
+
+    if (result.success) {
+      alert(result.message);
+      history("/login");
+    } else {
+      alert(result.message);
+      history("/");
+    }
   };
   return (
     <div
