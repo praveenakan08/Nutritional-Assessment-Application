@@ -1,16 +1,9 @@
-import {
-  ThemeProvider,
-  createTheme,
-  Box,
-  Grid,
-  FormLabel,
-  TextField,
-  Button,
-} from "@mui/material";
+import { ThemeProvider, createTheme, Box, Grid, Button } from "@mui/material";
 import CommonNavBar from "../components/CommonNavBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import API_URL from "..";
+import InputField from "../components/InputField";
 
 const theme = createTheme({
   palette: {
@@ -38,7 +31,7 @@ const ViewProfile = (): JSX.Element => {
     async function getUser() {
       try {
         const response = await axios.get(
-          API_URL+`/viewProfile?email=${email}`
+          API_URL + `/viewProfile?email=${email}`
         );
         setUser(response.data);
       } catch (error) {
@@ -63,37 +56,12 @@ const ViewProfile = (): JSX.Element => {
           width: 500,
         }}
       >
-        <Grid alignItems="center" spacing={3}>
-          <Grid item>
-            <FormLabel id="name">Name</FormLabel>
-            <TextField fullWidth value={user ? user.name : ""} />
-          </Grid>
-          <Grid item>
-            <FormLabel id="email">Email</FormLabel>
-            <TextField fullWidth value={user ? user.email : ""} />
-          </Grid>
-          <Grid item>
-            <FormLabel id="age">Age</FormLabel>
-            <TextField fullWidth type="number" value={user ? user.age : ""} />
-          </Grid>
-          <Grid item>
-            <FormLabel id="height">Height</FormLabel>
-            <TextField
-              fullWidth
-              placeholder="Enter your height"
-              id="height"
-              value={user ? user.height : ""}
-            />
-          </Grid>
-          <Grid item>
-            <FormLabel id="weight">Weight</FormLabel>
-            <TextField
-              fullWidth
-              placeholder="Enter your weight"
-              id="weight"
-              value={user ? user.weight : ""}
-            />
-          </Grid>
+        <Grid container spacing={3}>
+          <InputField label="Name" id="name" value={user?.name} />
+          <InputField label="Email" id="email" value={user?.email} />
+          <InputField label="Age" id="age" value={user?.age} />
+          <InputField label="Height" id="height" value={user?.height} />
+          <InputField label="Weight" id="weight" value={user?.weight} />
           <Grid item style={{ textAlign: "center", paddingTop: 10 }}>
             <Button
               variant="contained"
