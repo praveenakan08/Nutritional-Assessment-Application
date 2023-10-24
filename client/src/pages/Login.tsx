@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 const Login = (): JSX.Element => {
   const history = useNavigate();
@@ -25,7 +25,7 @@ const Login = (): JSX.Element => {
       .get(
         `http://localhost:3001/api/login?email=${email}&password=${password}`
       )
-      .then((result: any) => {
+      .then((result: AxiosResponse) => {
         console.log("Login Result", result);
         if (result.data.status === 200) {
           localStorage.setItem("email", email || "");
@@ -38,7 +38,7 @@ const Login = (): JSX.Element => {
         }
         setLoader(false);
       })
-      .catch((err: any) => {
+      .catch((err: AxiosError) => {
         alert("Not registered");
         history("/");
         setLoader(false);

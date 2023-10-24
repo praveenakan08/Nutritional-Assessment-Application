@@ -9,7 +9,7 @@ import {
   FormLabel,
   Input,
 } from "@mui/material";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import Dropzone from "../components/Dropzone";
 
 const UploadImage = (): JSX.Element => {
@@ -28,22 +28,32 @@ const UploadImage = (): JSX.Element => {
   const imageStyle = { width: "500px", height: "500px" };
 
   const AnalyzeImage = useCallback(() => {
+    const formData = new FormData();
+    formData.append("file", image[0]);
+    formData.append("filename", image[0].name);
+    formData.append("path", (image[0] as any).path);
+    console.log("Image", image[0]);
     axios
-      .post("http://localhost:3001/api/analyze", image[0])
-      .then((res) => {
+      .post("http://localhost:3001/api/analyze", {
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res: AxiosResponse) => {
         console.log("Response", res);
       })
-      .catch((err: any) => {
+      .catch((err: AxiosError) => {
         console.log("Error", err);
       });
   }, [image]);
 
   return (
-    <Box
-      className="register-page"
-      style={{ width: "100%", display: "flex", justifyContent: "center" }}
-    >
-      <>
+    <>
+      <Box
+        className="register-page"
+        style={{ width: "100%", display: "flex", justifyContent: "center" }}
+      >
         {image.length > 0 ? (
           image.map((image, index) => (
             <Box sx={{ marginTop: 10 }}>
@@ -90,46 +100,21 @@ const UploadImage = (): JSX.Element => {
             </Box>
           </Grid>
         )}
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: 10,
-          }}
-        >
-          {image.length > 0 && (
-            <Button
-              variant="contained"
-              color="success"
-              style={{ borderRadius: "6px" }}
-              size="large"
-              onClick={() => AnalyzeImage()}
-            >
-              <Typography>Analyze</Typography>
-            </Button>
-          )}
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: 10,
-            }}
+      </Box>
+      {image.length > 0 && (
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 5 }}>
+          <Button
+            variant="contained"
+            color="success"
+            style={{ borderRadius: "6px" }}
+            size="large"
+            onClick={() => AnalyzeImage()}
           >
-            {image.length > 0 && (
-              <Button
-                variant="contained"
-                color="success"
-                style={{ borderRadius: "6px" }}
-                size="large"
-                onClick={() => AnalyzeImage()}
-              >
-                <Typography>Analyze</Typography>
-              </Button>
-            )}
-          </Box>
+            <Typography>Analyze</Typography>
+          </Button>
         </Box>
-      </>
-    </Box>
+      )}
+    </>
   );
 };
 export default UploadImage;

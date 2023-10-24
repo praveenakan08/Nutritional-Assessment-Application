@@ -12,7 +12,7 @@ import {
   FormControl,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
@@ -64,7 +64,7 @@ const Register = (): JSX.Element => {
         weight,
         password,
       })
-      .then((result: any) => {
+      .then((result: AxiosResponse) => {
         console.log("Register Result", result);
         if (result.data.status === 200) {
           alert(result.data.message);
@@ -74,7 +74,7 @@ const Register = (): JSX.Element => {
           history("/");
         }
       })
-      .catch((err: any) => {
+      .catch((err: AxiosError) => {
         console.log(err);
       });
   };

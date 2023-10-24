@@ -72,10 +72,10 @@ app.post(`/api/register`, (req, res) => {
 });
 
 app.post(`/api/analyze`,async (req,res)=>{
-  const image=req.body;
+  const image=req.body.data;
   console.log("Image",image);
-  const file=fs.createReadStream(image.path);
-  console.log("File",file);
+  // const file=fs.createReadStream(image.path);
+  // console.log("File",file);
   const modelPath = './models/ML_Model/model.json';
   const handler = tfn.io.fileSystem(modelPath);
   const model = await loadGraphModel(handler as tf.io.IOHandler);
