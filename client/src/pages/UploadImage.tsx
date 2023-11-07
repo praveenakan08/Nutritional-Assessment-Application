@@ -5,115 +5,139 @@ import {
   Button,
   Divider,
   Grid,
+  ThemeProvider,
   Typography,
-  FormLabel,
-  Input,
+  createTheme,
+  CircularProgress,
 } from "@mui/material";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios from "axios";
 import Dropzone from "../components/Dropzone";
+import API_URL from "..";
 
 const UploadImage = (): JSX.Element => {
-  const [image, setImage] = useState<File[]>([]);
-
+  const [image, setImage] = useState<File>();
+  const [loader, setLoader] = useState<boolean>(false);
+  
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
-    //setImage(event.target.files[0] as File);
+    setImage(event.target.files[0] as File);
   };
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    setImage(acceptedFiles);
+  const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any) => {
+    setLoader(true);
+    setImage(acceptedFiles[0]);
+    if (image) {
+      setLoader(false);
+    }
   }, []);
 
   const imageStyle = { width: "500px", height: "500px" };
 
   const AnalyzeImage = useCallback(() => {
-    const formData = new FormData();
-    formData.append("file", image[0]);
-    formData.append("filename", image[0].name);
-    formData.append("path", (image[0] as any).path);
-    console.log("Image", image[0]);
     axios
-      .post("http://localhost:3001/api/analyze", {
-        data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res: AxiosResponse) => {
+      .post(API_URL+"/analyze", image)
+      .then((res) => {
         console.log("Response", res);
       })
-      .catch((err: AxiosError) => {
+      .catch((err: any) => {
         console.log("Error", err);
       });
   }, [image]);
 
+  const theme = createTheme({
+    palette: {
+      background: {
+        paper: "#fff",
+      },
+      text: {
+        primary: "#173A5E",
+        secondary: "#46505A",
+      },
+      action: {
+        active: "#001E3C",
+      },
+    },
+    typography: {
+      fontFamily: ["tinos"].join(","),
+      fontSize: 15,
+      button: {
+        textTransform: "none",
+      },
+    },
+  });
+
   return (
-    <>
-      <Box
+    <ThemeProvider theme={theme}>
+      <div
         className="register-page"
         style={{ width: "100%", display: "flex", justifyContent: "center" }}
       >
-        {image.length > 0 ? (
-          image.map((image, index) => (
-            <Box sx={{ marginTop: 10 }}>
-              <img
-                style={imageStyle}
-                src={`${URL.createObjectURL(image)}`}
-                key={index}
-                alt=""
-              />
-            </Box>
-          ))
-        ) : (
-          <Grid container xs={12} columnGap={4}>
-            <Box paddingLeft={20} paddingTop={4}>
-              <Dropzone onDrop={onDrop} accept={"image/*"} />
-            </Box>
-
-            <Grid marginTop={28}>
-              <Divider
-                orientation="vertical"
-                style={{ height: "100%", backgroundColor: "#26672D" }}
-              />
-            </Grid>
-
-            <Box paddingTop={45}>
-              <FormLabel htmlFor="upload-photo">
-                <Input
-                  style={{ display: "none" }}
-                  id="upload-photo"
-                  name="upload-photo"
-                  type="file"
-                  onChange={handleChange}
+        {loader && <CircularProgress color="success" size={10} />}
+        <div>
+          {image ? (
+              <Box sx={{ marginTop: 10 }}>
+                <img
+                  style={imageStyle}
+                  src={`${URL.createObjectURL(image)}`}
+                  alt=""
                 />
-                <Button
-                  sx={{ bgcolor: "#26672D" }}
-                  variant="contained"
-                  component="span"
-                  startIcon={<Avatar src={"/upload-file-white.png"} />}
-                  //onClick={handleChange}
-                >
-                  <Typography>Select from Computer</Typography>
-                </Button>
-              </FormLabel>
-            </Box>
-          </Grid>
-        )}
-      </Box>
-      {image.length > 0 && (
-        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 5 }}>
-          <Button
-            variant="contained"
-            color="success"
-            style={{ borderRadius: "6px" }}
-            size="large"
-            onClick={() => AnalyzeImage()}
+              </Box>
+          ) : (
+            <Grid container xs={12} columnGap={4}>
+              <Box paddingLeft={20} paddingTop={4}>
+                <Dropzone onDrop={onDrop} accept={"image/*"} />
+              </Box>
+
+              <Grid marginTop={28}>
+                <Divider
+                  orientation="vertical"
+                  style={{ height: "100%", backgroundColor: "#26672D" }}
+                />
+              </Grid>
+
+              <Box paddingTop={45}>
+                <label htmlFor="upload-photo">
+                  <input
+                    style={{ display: "none" }}
+                    id="upload-photo"
+                    name="upload-photo"
+                    type="file"
+                    onChange={handleChange}
+                  />
+                  <Button
+                    sx={{ bgcolor: "#26672D" }}
+                    variant="contained"
+                    component="span"
+                    startIcon={<Avatar src={"/upload-file-white.png"} />}
+                  >
+                    <Typography>Select from Computer</Typography>
+                  </Button>
+                </label>
+              </Box>
+            </Grid>
+          )}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: 10,
+            }}
           >
-            <Typography>Analyze</Typography>
-          </Button>
-        </Box>
-      )}
-    </>
+            {image && (
+              <Button
+                variant="contained"
+                color="success"
+                style={{ borderRadius: "6px" }}
+                size="large"
+                onClick={() => AnalyzeImage()}
+              >
+                <Typography>Analyze</Typography>
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    </ThemeProvider>
   );
 };
 export default UploadImage;
