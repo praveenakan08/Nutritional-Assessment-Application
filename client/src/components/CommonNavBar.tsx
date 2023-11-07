@@ -15,31 +15,10 @@ import {
   ThemeProvider,
   Toolbar,
   Typography,
-  createTheme,
 } from "@mui/material";
+import { theme } from "../common/theme";
 
 const drawerWidth = 240;
-
-const theme = createTheme({
-  palette: {
-    background: {
-      paper: "#fff",
-    },
-    text: {
-      primary: "#173A5E",
-      secondary: "#46505A",
-    },
-    action: {
-      active: "#001E3C",
-    },
-  },
-  typography: {
-    fontFamily: ["tinos"].join(","),
-    button: {
-      textTransform: 'none',
-    }
-  },
-});
 
 const CommonNavBar = (): JSX.Element => {
   return (
@@ -85,10 +64,13 @@ const CommonNavBar = (): JSX.Element => {
                 src="/profile-image.png"
                 sx={{ width: 75, height: 75 }}
               />
-              <Button variant="text" sx={{color:"#ffffff"}} component={Link} href="/viewProfile">
-                <Typography>
-                  Your Profile
-                </Typography>
+              <Button
+                variant="text"
+                sx={{ color: "#ffffff" }}
+                component={Link}
+                href="/viewProfile"
+              >
+                <Typography>Your Profile</Typography>
               </Button>
             </Grid>
 
@@ -96,8 +78,7 @@ const CommonNavBar = (): JSX.Element => {
               {[
                 { text: "Dashboard", url: "/dashboard" },
                 { text: "Upload Food Image", url: "/uploadImage" },
-                // { text: "Edit Profile", url: "/viewProfile" },
-                { text: "View Assessment History", url: "/" },
+                { text: "View Assessment History", url: "/analyzeImage" },
               ].map((item, index) => (
                 <Link href={item.url} style={{ color: "#FFF" }}>
                   <ListItem key={item.text} disablePadding>
@@ -115,15 +96,17 @@ const CommonNavBar = (): JSX.Element => {
             <Divider />
             <List>
               {["Logout"].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton>
-                    <ListItemText
-                      primary={text}
-                      primaryTypographyProps={{ fontSize: "21px" }}
-                      sx={{ textAlign: "center" }}
-                    />
-                  </ListItemButton>
-                </ListItem>
+                <Link href="/login" style={{ color: "#FFF" }}>
+                  <ListItem key={text} disablePadding>
+                    <ListItemButton onClick={() => localStorage.clear()}>
+                      <ListItemText
+                        primary={text}
+                        primaryTypographyProps={{ fontSize: "21px" }}
+                        sx={{ textAlign: "center" }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
               ))}
             </List>
           </Drawer>
