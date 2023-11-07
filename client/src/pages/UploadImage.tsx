@@ -9,7 +9,7 @@ import {
   FormLabel,
   Input,
 } from "@mui/material";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import Dropzone from "../components/Dropzone";
 
 const UploadImage = (): JSX.Element => {
