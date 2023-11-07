@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { login } from "../axiosCalls";
 
 const Login = (): JSX.Element => {
   const history = useNavigate();
@@ -19,32 +19,21 @@ const Login = (): JSX.Element => {
   const [loader, setLoader] = useState<boolean>(false);
   const { handleSubmit } = useForm();
 
-  const onSubmit = (formInput: any) => {
+  const onSubmit = async () => {
     setLoader(true);
-    axios
-      .get(
-        `http://localhost:3001/api/login?email=${email}&password=${password}`
-      )
-      .then((result: AxiosResponse) => {
-        console.log("Login Result", result);
-        if (result.data.status === 200) {
-          localStorage.setItem("email", email || "");
-          history("/dashboard");
-        } else if (result.data.status === 403) {
-          alert("Wrong password!Try again");
-        } else {
-          alert("Not registered");
-          history("/");
-        }
-        setLoader(false);
-      })
-      .catch((err: AxiosError) => {
-        alert("Not registered");
-        history("/");
-        setLoader(false);
-        console.log(err);
-      });
+    const result = await login({ email, password });
+
+    if (result.success) {
+      alert(result.message);
+      history("/dashboard");
+    } else {
+      alert(result.message);
+      history("/");
+    }
+
+    setLoader(false);
   };
+
   return (
     <Box
       className="register-page"

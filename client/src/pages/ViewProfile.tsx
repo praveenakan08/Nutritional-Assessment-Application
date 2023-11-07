@@ -1,30 +1,23 @@
-import {
-  Box,
-  Grid,
-  Typography,
-  FormLabel,
-  TextField,
-  Button,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-} from "@mui/material";
-
+import { Box, Grid, FormLabel, TextField, Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { getUserDetails } from "../axiosCalls";
 
 const ViewProfile = (): JSX.Element => {
   const [user, setUser] = useState<any>();
   const email = localStorage.getItem("email");
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3001/api/viewProfile?${email}`)
-      .then((res) => setUser(res.data))
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  });
+    const getUser = async () => {
+      try {
+        const user = await getUserDetails({ email });
+        setUser(user);
+      } catch (error) {
+        alert("User Fetch failed!");
+      }
+    };
+
+    getUser();
+  }, [email]);
 
   return (
     <Box

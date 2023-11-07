@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   TextField,
   Grid,
@@ -12,10 +12,10 @@ import {
   FormControl,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import axios, { AxiosError, AxiosResponse } from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
+import { registerUser } from "../axiosCalls";
 
 const Register = (): JSX.Element => {
   const history = useNavigate();
@@ -52,31 +52,24 @@ const Register = (): JSX.Element => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit = (event: any) => {
-    event.preventDefault();
-    axios
-      .post("http://localhost:3001/api/register", {
-        name,
-        email,
-        gender,
-        age,
-        height,
-        weight,
-        password,
-      })
-      .then((result: AxiosResponse) => {
-        console.log("Register Result", result);
-        if (result.data.status === 200) {
-          alert(result.data.message);
-          history("/login");
-        } else {
-          alert(result.data.message);
-          history("/");
-        }
-      })
-      .catch((err: AxiosError) => {
-        console.log(err);
-      });
+  const onSubmit = async (formInput: any) => {
+    const result = await registerUser({
+      name,
+      email,
+      gender,
+      age,
+      height,
+      weight,
+      password,
+    });
+
+    if (result.success) {
+      alert(result.message);
+      history("/login");
+    } else {
+      alert(result.message);
+      history("/");
+    }
   };
   return (
     <Box

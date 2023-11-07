@@ -36,10 +36,20 @@ app.get(`/api/login`, (req, res) => {
     });
 });
 
-app.get(`/api/viewProfile`, (req, res) => {
-  const email = req.query.email;
-  const response = RegisterModel.findOne({ email: email }); 
-  return res.json(response);
+app.get(`/api/viewProfile`, async (req, res) => {
+  try {
+    const email = req.query.email;
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+    const user = await RegisterModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.post(`/api/register`, (req, res) => {

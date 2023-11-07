@@ -17,8 +17,7 @@ const UploadImage = (): JSX.Element => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
-    setImage(event.target.files[0] as any);
-    console.log("Hello!!", event.target.files[0]);
+    //setImage(event.target.files[0] as File);
   };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {

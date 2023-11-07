@@ -98,7 +98,7 @@ const CommonNavBar = (): JSX.Element => {
               {["Logout"].map((text, index) => (
                 <Link href="/login" style={{ color: "#FFF" }}>
                   <ListItem key={text} disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={() => localStorage.clear()}>
                       <ListItemText
                         primary={text}
                         primaryTypographyProps={{ fontSize: "21px" }}
