@@ -3,22 +3,20 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { RegisterModel } from "./models/Register";
 import path, { join } from "path";
-import * as tf from '@tensorflow/tfjs';
-import { ImageData, loadImage } from "canvas";
-import * as tfn from '@tensorflow/tfjs-node';
-import {loadGraphModel} from '@tensorflow/tfjs-converter';
-import * as fs from 'fs';
+import * as tfn from "@tensorflow/tfjs-node";
+import { Request, Response } from "express";
+import fileUpload, { UploadedFile } from "express-fileupload";
+import fs from "fs";
 
 const port = 3001;
 const app = express();
 const UI_BUILD = join(__dirname);
-
+app.use(fileUpload());
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(UI_BUILD, "public")));
 
 mongoose.connect("mongodb://127.0.0.1:27017/admin");
-
 
 app.get(`/api/login`, (req, res) => {
   const email = req.query.email;
@@ -72,34 +70,110 @@ app.post(`/api/register`, (req, res) => {
             res.json({ status: 200, message: "Account Created!" });
           })
           .catch((err: any) => {
-            res.json({ status:500,message: "Error in Creating Account",error:err });
+            res.json({
+              status: 500,
+              message: "Error in Creating Account",
+              error: err,
+            });
           });
       }
     })
     .catch((err: any) => {
-      res.json({ status:500,message: "Error in Creating Account",error:err });
+      res.json({
+        status: 500,
+        message: "Error in Creating Account",
+        error: err,
+      });
     });
 });
 
-app.post(`/api/analyze`,async (req,res)=>{
-  const image=req.body.data;
-  console.log("Image",image);
-  // const file=fs.createReadStream(image.path);
-  // console.log("File",file);
-  const modelPath = './models/ML_Model/model.json';
-  const handler = tfn.io.fileSystem(modelPath);
-  const model = await loadGraphModel(handler as tf.io.IOHandler);
-  const input = tf.browser.fromPixels(image);
+function findKeyByValue(
+  map: { [index: string]: number },
+  value: number
+): string | undefined {
+  const keys = Object.keys(map);
+  for (const key of keys) {
+    if (map[key] === value) {
+      return key;
+    }
+  }
+  return undefined;
+}
 
-  // .toFloat()
-  // .expandDims();
-console.log("Input", input);
-const normalized = input.div(255);
-const predictions = model.predict(normalized) as tf.Tensor;
-console.log("Prdictions", predictions);
-return res.json(predictions);
-  
-})
+app.post("/api/analyze", async (req: Request, res: Response) => {
+  try {
+    if (!req.files || !req.files.files) {
+      return res.status(400).send("No file uploaded or incorrect field name.");
+    }
+    const image = req.files.files as UploadedFile;
+
+    const handler = tfn.io.fileSystem("./JSON MODEL-3/model.json");
+    const model = await tfn.loadGraphModel(handler);
+
+    const imgBuffer = Buffer.from(image.data);
+    const imgTensor = tfn.node.decodeImage(imgBuffer);
+
+    const resizedImgTensor = tfn.image.resizeBilinear(imgTensor, [224, 224]);
+    const channels = 3;
+
+    const normalizedImgTensor = resizedImgTensor.toFloat().div(255);
+
+    const processedInput = normalizedImgTensor.reshape([1, 224, 224, channels]);
+
+    const predictions = model.predict(processedInput);
+    const [
+      cal_output,
+      carbs_output,
+      category_output,
+      pro_output,
+      ing_output,
+      fat_output,
+    ] = predictions as tfn.Tensor[];
+
+    const categoryValues = category_output.arraySync() as number[];
+    const ingValues = ing_output.arraySync() as number[];
+    const calValue = cal_output.arraySync() as number;
+    const carbsValue = carbs_output.arraySync() as number;
+    const proValue = pro_output.arraySync() as number;
+    const fatValue = fat_output.arraySync() as number;
+
+    console.log("CALORIE PREDICTION", calValue);
+    console.log("CARBS PREDICTION", carbsValue);
+    console.log("PROTEIN PREDICTION", proValue);
+    console.log("FAT PREDICTION", fatValue);
+
+    const categoryFilePath = path.join(__dirname, "./metadata/cat.json");
+    const categoryJsonData = fs.readFileSync(categoryFilePath, "utf-8");
+    const flatCategoryValues = categoryValues.flat();
+    const maxCategoryValue = Math.max(...flatCategoryValues);
+    const cat_pred = flatCategoryValues.indexOf(maxCategoryValue);
+    const categoryMap: { [index: string]: number } =
+      JSON.parse(categoryJsonData);
+    const category = findKeyByValue(categoryMap, cat_pred);
+    console.log("CATEGORY PREDICTION", category);
+
+    const filePath = path.join(__dirname, "./metadata/ing.json");
+    const jsonData = fs.readFileSync(filePath, "utf-8");
+    const flatIngValues = ingValues.flat();
+    const ing_pred: number[] = [];
+    flatIngValues.forEach((value, index) => {
+      if (value >= 0.5) {
+        ing_pred.push(index);
+      }
+    });
+
+    console.log("INGREDIENTS PREDICTION");
+    const ingredientMap: { [index: string]: number } = JSON.parse(jsonData);
+    ing_pred.forEach((value, index) => {
+      const key = findKeyByValue(ingredientMap, value);
+      console.log(key);
+    });
+  } catch (error) {
+    console.error("Error in analyzing image:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.listen(port, () => {
   console.log("Server is Running at 3001");
 });

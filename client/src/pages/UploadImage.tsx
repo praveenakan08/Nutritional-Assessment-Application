@@ -32,16 +32,23 @@ const UploadImage = (): JSX.Element => {
   }, []);
 
   const imageStyle = { width: "500px", height: "500px" };
+  
+  const AnalyzeImage = useCallback(async () => {
+    try {
+      if (!image) {
+        console.error('No image found');
+        return;
+      }
+      const formData = new FormData();
+      formData.append('files', image);
 
-  const AnalyzeImage = useCallback(() => {
-    axios
-      .post(API_URL+"/analyze", image)
-      .then((res) => {
-        console.log("Response", res);
+      axios.post(API_URL + "/analyze", formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       })
-      .catch((err: any) => {
-        console.log("Error", err);
-      });
+  
+    } catch (error) {
+      console.error('Error sending image:', error);
+    }
   }, [image]);
 
   const theme = createTheme({
