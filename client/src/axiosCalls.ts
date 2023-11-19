@@ -39,10 +39,17 @@ export const login = async ({ email, password }: LoginProps) => {
   }
 };
 
-export const registerUser = async ({name, email, gender, age, height, weight, password}: RegisterUserProps) => {
+export const registerUser = async ({
+  name,
+  email,
+  gender,
+  age,
+  height,
+  weight,
+  password,
+}: RegisterUserProps) => {
   try {
-    const result = await axios
-    .post(API_URL+"/register", {
+    const result = await axios.post(API_URL + "/register", {
       name,
       email,
       gender,
@@ -50,19 +57,19 @@ export const registerUser = async ({name, email, gender, age, height, weight, pa
       height,
       weight,
       password,
-    })
+    });
 
     if (result.data.status === 200) {
-      return {success: true, message: "Registered Successfully!"};
+      return { success: true, message: result.data.message };
     } else {
-      return {success: false, message: "Registration failed!"};
+      return { success: false, message: result.data.message };
     }
   } catch (error) {
-    return {success: false, message: "Registration failed!"};
+    return { success: false, message: error };
   }
 };
 
-export const getUserDetails = async ({email}: GetUserDetailsProps) => {
+export const getUserDetails = async ({ email }: GetUserDetailsProps) => {
   try {
     const response = await axios.get(API_URL + `/viewProfile?email=${email}`);
     return response.data;

@@ -27,13 +27,11 @@ const Register = (): JSX.Element => {
   const [weight, setWeight] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  let EMAIL_REGX =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{4,}$/;
+  // let EMAIL_REGX =
+  //   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{4,}$/;
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
-    email: Yup.string()
-      .matches(EMAIL_REGX, "Email is invalid")
-      .required("Email is required"),
+    email: Yup.string().required("Email is required"),
     password: Yup.string()
       .required("Password is required")
       .min(6, "Password must be at least 6 characters")

@@ -5,9 +5,7 @@ import {
   Button,
   Divider,
   Grid,
-  ThemeProvider,
   Typography,
-  createTheme,
   CircularProgress,
 } from "@mui/material";
 import axios from "axios";
@@ -41,9 +39,15 @@ const UploadImage = (): JSX.Element => {
       }
       const formData = new FormData();
       formData.append('files', image);
+      formData.append('email', localStorage.getItem('email')||'');
 
       axios.post(API_URL + "/analyze", formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
+      }).then((response)=>{
+       
+
+      }).catch((err)=>{
+        console.log("Error",err);
       })
   
     } catch (error) {
@@ -51,30 +55,7 @@ const UploadImage = (): JSX.Element => {
     }
   }, [image]);
 
-  const theme = createTheme({
-    palette: {
-      background: {
-        paper: "#fff",
-      },
-      text: {
-        primary: "#173A5E",
-        secondary: "#46505A",
-      },
-      action: {
-        active: "#001E3C",
-      },
-    },
-    typography: {
-      fontFamily: ["tinos"].join(","),
-      fontSize: 15,
-      button: {
-        textTransform: "none",
-      },
-    },
-  });
-
   return (
-    <ThemeProvider theme={theme}>
       <div
         className="register-page"
         style={{ width: "100%", display: "flex", justifyContent: "center" }}
@@ -144,7 +125,6 @@ const UploadImage = (): JSX.Element => {
           </div>
         </div>
       </div>
-    </ThemeProvider>
   );
 };
 export default UploadImage;

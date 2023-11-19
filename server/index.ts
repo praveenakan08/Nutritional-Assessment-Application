@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import { RegisterModel } from "./models/Register";
+import { RegisterModel, MetricModel } from "./models";
 import path, { join } from "path";
 import * as tfn from "@tensorflow/tfjs-node";
 import { Request, Response } from "express";
@@ -17,6 +17,19 @@ app.use(express.json());
 app.use(express.static(path.join(UI_BUILD, "public")));
 
 mongoose.connect("mongodb://127.0.0.1:27017/admin");
+
+function findKeyByValue(
+  map: { [index: string]: number },
+  value: number
+): string | undefined {
+  const keys = Object.keys(map);
+  for (const key of keys) {
+    if (map[key] === value) {
+      return key;
+    }
+  }
+  return undefined;
+}
 
 app.get(`/api/login`, (req, res) => {
   const email = req.query.email;
@@ -79,6 +92,7 @@ app.post(`/api/register`, (req, res) => {
       }
     })
     .catch((err: any) => {
+      console.log("Error", err);
       res.json({
         status: 500,
         message: "Error in Creating Account",
@@ -87,26 +101,13 @@ app.post(`/api/register`, (req, res) => {
     });
 });
 
-function findKeyByValue(
-  map: { [index: string]: number },
-  value: number
-): string | undefined {
-  const keys = Object.keys(map);
-  for (const key of keys) {
-    if (map[key] === value) {
-      return key;
-    }
-  }
-  return undefined;
-}
-
 app.post("/api/analyze", async (req: Request, res: Response) => {
   try {
     if (!req.files || !req.files.files) {
       return res.status(400).send("No file uploaded or incorrect field name.");
     }
     const image = req.files.files as UploadedFile;
-
+    const email = req.body.email;
     const handler = tfn.io.fileSystem("./JSON MODEL-3/model.json");
     const model = await tfn.loadGraphModel(handler);
 
@@ -132,16 +133,25 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
 
     const categoryValues = category_output.arraySync() as number[];
     const ingValues = ing_output.arraySync() as number[];
-    const calValue = cal_output.arraySync() as number;
-    const carbsValue = carbs_output.arraySync() as number;
-    const proValue = pro_output.arraySync() as number;
-    const fatValue = fat_output.arraySync() as number;
+    const calValue = Math.round((cal_output.arraySync() as number) * 100) / 100;
+    const carbsValue =
+      Math.round((carbs_output.arraySync() as number) * 100) / 100;
+    const proValue = Math.round((pro_output.arraySync() as number) * 100) / 100;
+    const fatValue = Math.round((fat_output.arraySync() as number) * 100) / 100;
 
     console.log("CALORIE PREDICTION", calValue);
     console.log("CARBS PREDICTION", carbsValue);
     console.log("PROTEIN PREDICTION", proValue);
     console.log("FAT PREDICTION", fatValue);
 
+    // const nutritionalMetrics = [
+    //   { name: "calorie", value: calValue },
+    //   { name: "carbohydrates", value: carbsValue },
+    //   { name: "protein", value: proValue },
+    //   { name: "fat", value: fatValue },
+    // ];
+
+    //Category Prediction
     const categoryFilePath = path.join(__dirname, "./metadata/cat.json");
     const categoryJsonData = fs.readFileSync(categoryFilePath, "utf-8");
     const flatCategoryValues = categoryValues.flat();
@@ -152,6 +162,7 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     const category = findKeyByValue(categoryMap, cat_pred);
     console.log("CATEGORY PREDICTION", category);
 
+    //Ingredients Prediction
     const filePath = path.join(__dirname, "./metadata/ing.json");
     const jsonData = fs.readFileSync(filePath, "utf-8");
     const flatIngValues = ingValues.flat();
@@ -164,10 +175,39 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
 
     console.log("INGREDIENTS PREDICTION");
     const ingredientMap: { [index: string]: number } = JSON.parse(jsonData);
+    const ingredients: string[] = [];
     ing_pred.forEach((value, index) => {
       const key = findKeyByValue(ingredientMap, value);
-      console.log(key);
+      ingredients.push(key || "");
     });
+    console.log(ingredients);
+
+    //Inserting metrics info into DB
+    MetricModel.insertMany([
+      {
+        email: email,
+        dish: category,
+        date: new Date(),
+        calorie: calValue,
+        carbohydrates: carbsValue,
+        protein: proValue,
+        fat: fatValue,
+      },
+    ])
+      .then((result: any) => {
+        res.json({
+          status: 200,
+          message: "Metrics info inserted",
+          metrcis: result,
+        });
+      })
+      .catch((err: any) => {
+        res.json({
+          status: 500,
+          message: "Error in inserting Metrics",
+          error: err,
+        });
+      });
   } catch (error) {
     console.error("Error in analyzing image:", error);
     res.status(500).json({ error: "Internal server error" });
