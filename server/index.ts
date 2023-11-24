@@ -8,15 +8,28 @@ import { Request, Response } from "express";
 import fileUpload, { UploadedFile } from "express-fileupload";
 import fs from "fs";
 
-const port = 3001;
 const app = express();
 const UI_BUILD = join(__dirname);
+const corsOptions = {
+  origin: "http://localhost:3000", // frontend URI (ReactJS)
+};
+require("dotenv").config();
 app.use(fileUpload());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static(path.join(UI_BUILD, "public")));
 
-mongoose.connect("mongodb://127.0.0.1:27017/admin");
+mongoose
+  .connect(process.env.MONGODB_URI || "")
+  .then(() => {
+    const PORT = process.env.PORT || 8000;
+    app.listen(PORT, () => {
+      console.log(`App is Listening on PORT ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 function findKeyByValue(
   map: { [index: string]: number },
@@ -288,8 +301,4 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     console.error("Error in analyzing image:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
-
-app.listen(port, () => {
-  console.log("Server is Running at 3001");
 });
