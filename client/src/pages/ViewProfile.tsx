@@ -40,8 +40,6 @@ const ViewProfile = (): JSX.Element => {
   }, [email]);
   
   return (
-    <ThemeProvider theme={theme}>
-      <CommonNavBar></CommonNavBar>
       <Box
         sx={{
           bgcolor: "background.paper",
@@ -72,7 +70,6 @@ const ViewProfile = (): JSX.Element => {
           </Grid>
         </Grid>
       </Box>
-    </ThemeProvider>
   );
 };
 

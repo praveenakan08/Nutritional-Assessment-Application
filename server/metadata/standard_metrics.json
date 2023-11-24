@@ -1,0 +1,100 @@
+{
+  "2-5": {
+    "male": {
+      "calories": 1200,
+      "protein": 13,
+      "fat": 30,
+      "carbohydrates": 130
+    },
+    "female": {
+      "calories": 1100,
+      "protein": 12,
+      "fat": 30,
+      "carbohydrates": 130
+    }
+  },
+  "6-9": {
+    "male": {
+      "calories": 1600,
+      "protein": 19,
+      "fat": 40,
+      "carbohydrates": 180
+    },
+    "female": {
+      "calories": 1400,
+      "protein": 17,
+      "fat": 35,
+      "carbohydrates": 160
+    }
+  },
+  "10-14": {
+    "male": {
+      "calories": 2000,
+      "protein": 34,
+      "fat": 45,
+      "carbohydrates": 230
+    },
+    "female": {
+      "calories": 1800,
+      "protein": 30,
+      "fat": 40,
+      "carbohydrates": 200
+    }
+  },
+  "15-18": {
+    "male": {
+      "calories": 2400,
+      "protein": 52,
+      "fat": 60,
+      "carbohydrates": 280
+    },
+    "female": {
+      "calories": 2000,
+      "protein": 46,
+      "fat": 50,
+      "carbohydrates": 230
+    }
+  },
+  "19-30": {
+    "male": {
+      "calories": 2500,
+      "protein": 56,
+      "fat": 70,
+      "carbohydrates": 310
+    },
+    "female": {
+      "calories": 2000,
+      "protein": 46,
+      "fat": 60,
+      "carbohydrates": 260
+    }
+  },
+  "31-50": {
+    "male": {
+      "calories": 2400,
+      "protein": 56,
+      "fat": 70,
+      "carbohydrates": 300
+    },
+    "female": {
+      "calories": 1800,
+      "protein": 46,
+      "fat": 60,
+      "carbohydrates": 240
+    }
+  },
+  "51": {
+    "male": {
+      "calories": 2200,
+      "protein": 56,
+      "fat": 70,
+      "carbohydrates": 280
+    },
+    "female": {
+      "calories": 1800,
+      "protein": 46,
+      "fat": 60,
+      "carbohydrates": 240
+    }
+  }
+}

@@ -63,6 +63,25 @@ app.get(`/api/viewProfile`, async (req, res) => {
   }
 });
 
+app.get("/api/userInfo", (req, res) => {
+  const email = req.query.email;
+  RegisterModel.findOne({ email: email })
+    .then((result) => {
+      res.json({
+        status: 200,
+        message: "User Info retrieved",
+        payload: result,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        status: 500,
+        message: "Error in fetching userInfo",
+        error: err,
+      });
+    });
+});
+
 app.post(`/api/register`, (req, res) => {
   const { name, email, gender, age, height, bmi, password } = req.body;
   RegisterModel.findOne({ email: email })
@@ -99,6 +118,63 @@ app.post(`/api/register`, (req, res) => {
         error: err,
       });
     });
+});
+
+app.get("/api/getMetrics", async (req, res) => {
+  const email = req.query.email;
+  const currentDate = new Date();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  MetricModel.find({
+    email: email,
+    date: {
+      $gte: today,
+      $lte: currentDate,
+    },
+  })
+    .then((result) => {
+      res.json({
+        status: 200,
+        message: "Metrics info retreived",
+        payload: result,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        message: "Error in fetching metrics info",
+        error: err,
+        status: 500,
+      });
+    });
+});
+
+app.get("/api/getStdMetrics", async (req, res) => {
+  const email = req.query.email;
+  const age = parseInt(req.query.age as string);
+  const gender = req.query.gender as string;
+  fs.readFile("./metadata/standard_metrics.json", "utf8", (err, data) => {
+    if (err) {
+      console.error("Error reading JSON file:", err);
+      return;
+    }
+    const std_metrics = JSON.parse(data);
+    for (const [key, value] of Object.entries(std_metrics)) {
+      const true_age = key.split("-");
+      if (parseInt(true_age?.[0]) <= age && parseInt(true_age?.[1]) >= age) {
+        res.json({
+          status: 200,
+          message: "Standard Metrics info retreived",
+          payload: (value as any)[gender],
+        });
+      }
+    }
+    // res.json({
+    //   message: "Error in fetching standard metrics info",
+    //   error: err,
+    //   status: 500,
+    // });
+  });
 });
 
 app.post("/api/analyze", async (req: Request, res: Response) => {
@@ -198,7 +274,7 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
         res.json({
           status: 200,
           message: "Metrics info inserted",
-          metrcis: result,
+          payload: { metrics: result, ingredients: ingredients },
         });
       })
       .catch((err: any) => {
