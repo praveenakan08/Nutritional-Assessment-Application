@@ -7,13 +7,14 @@ import * as tfn from "@tensorflow/tfjs-node";
 import { Request, Response } from "express";
 import fileUpload, { UploadedFile } from "express-fileupload";
 import fs from "fs";
+require("dotenv").config();
 
 const app = express();
 const UI_BUILD = join(__dirname);
 const corsOptions = {
   origin: "http://localhost:3000", // frontend URI (ReactJS)
 };
-require("dotenv").config();
+
 app.use(fileUpload());
 app.use(cors(corsOptions));
 app.use(express.json());

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "install-server": "cd server && npm install",
-    "start-server": "cd server && node index.ts",
+    "start-server": "cd server && ts-node index.ts",
     "install-client": "cd client && npm install",
     "build-client": "cd client && npm run build",
     "start-client": "cd client && npm run start"
@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/MansiRathi/Nutritional-Assessment-Application/issues"
   },
-  "homepage": "https://github.com/MansiRathi/Nutritional-Assessment-Application#readme"
+  "homepage": "https://github.com/MansiRathi/Nutritional-Assessment-Application#readme",
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
+  }
 }
