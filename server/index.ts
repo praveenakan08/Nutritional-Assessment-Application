@@ -22,7 +22,8 @@ const corsOptions = {
 app.use(fileUpload());
 app.use(express.json());
 
-app.use(cors(corsOptions));
+app.use(cors());
+app.options("*", cors());
 
 // app.use(express.static(path.join(UI_BUILD, "public")));
 
