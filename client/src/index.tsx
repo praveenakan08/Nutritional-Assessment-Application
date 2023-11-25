@@ -8,9 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-
-console.log("process.env.PUBLIC_URL", process.env.PUBLIC_URL);
-const API_URL = "https://nutrifit-backend.onrender.com/api";
+const API_URL = "https://nutrifit-app.onrender.com/api";
 
 //|| "http://localhost:3001/api"local
 
