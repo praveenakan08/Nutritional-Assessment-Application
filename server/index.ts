@@ -20,12 +20,12 @@ console.log("UI Build", UI_BUILD);
 // const currentServerDirectory = __dirname;
 
 // Move up one level to the project root
-const projectRoot = path.resolve(UI_BUILD, "..");
+// const projectRoot = path.resolve(UI_BUILD, "..");
 
 // Now, move into the 'client' directory
 
 // app.use(express.static(path.join(projectRoot, ".client/build")));
-console.log(path.join(projectRoot, "./client/build"));
+// console.log(path.join(projectRoot, "./client/build"));
 app.use(fileUpload());
 app.use(express.json());
 app.use(cors(corsOptions));
