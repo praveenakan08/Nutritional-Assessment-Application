@@ -17,8 +17,15 @@ const corsOptions = {
   origin: "*", // frontend URI (ReactJS)
 };
 console.log("UI Build", UI_BUILD);
+// const currentServerDirectory = __dirname;
 
-app.use(express.static(path.join(__dirname, "./client/build")));
+// Move up one level to the project root
+const projectRoot = path.resolve(UI_BUILD, "..");
+
+// Now, move into the 'client' directory
+const clientDirectory = path.join(projectRoot, "client");
+
+app.use(express.static(path.join(clientDirectory, "./build")));
 // console.log(path.join(__dirname, "./client/build"));
 app.use(fileUpload());
 app.use(express.json());
