@@ -29,12 +29,7 @@ app.use(express.json());
 app.use(cors(corsOptions));
 // app.use("/static", express.static(path.join(__dirname, "/static")));
 // console.log("Serving static files from /static");
-app.use(express.static(path.join(UI_BUILD, "client/build")));
 
-// Handle React routing, return all requests to React app
-app.get("*", (req, res) => {
-  res.sendFile(path.join(UI_BUILD, "client/build", "index.html"));
-});
 console.log("process.env.MONGODB_URI", process.env.MONGODB_URI);
 
 app.get("/", (req, res) => {
