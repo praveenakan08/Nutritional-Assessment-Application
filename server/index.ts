@@ -16,8 +16,6 @@ console.log("");
 const corsOptions = {
   origin: "*", // frontend URI (ReactJS)
 };
-console.log("UI Build", UI_BUILD);
-// const currentServerDirectory = __dirname;
 
 // Move up one level to the project root
 // const projectRoot = path.resolve(UI_BUILD, "..");
@@ -29,28 +27,14 @@ console.log("UI Build", UI_BUILD);
 app.use(fileUpload());
 app.use(express.json());
 app.use(cors(corsOptions));
-app.use("/static", express.static(path.join(__dirname, "/static")));
-console.log("Serving static files from /static");
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(projectRoot, "./client/build", "index.html"));
-// });
+// app.use("/static", express.static(path.join(__dirname, "/static")));
+// console.log("Serving static files from /static");
+app.use(express.static(path.join(UI_BUILD, "client/build")));
 
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-//   );
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
-// app.options("*", cors());
-
-// app.use(express.static(path.join(UI_BUILD, "public")));
-
+// Handle React routing, return all requests to React app
+app.get("*", (req, res) => {
+  res.sendFile(path.join(UI_BUILD, "client/build", "index.html"));
+});
 console.log("process.env.MONGODB_URI", process.env.MONGODB_URI);
 
 app.get("/", (req, res) => {
