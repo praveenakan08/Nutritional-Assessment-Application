@@ -17,11 +17,13 @@ const corsOptions = {
   origin: "*", // frontend URI (ReactJS)
 };
 
-//"http://localhost:3000",local
+app.use(express.static(path.join(__dirname, "client/build")));
 app.use(fileUpload());
 app.use(express.json());
-
 app.use(cors(corsOptions));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build", "index.html"));
+});
 
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*");
