@@ -20,6 +20,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static(path.join(UI_BUILD, "public")));
 
+console.log("process.env.MONGODB_URI", process.env.MONGODB_URI);
+
 mongoose
   .connect(process.env.MONGODB_URI || "")
   .then(() => {
