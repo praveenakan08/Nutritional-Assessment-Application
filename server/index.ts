@@ -14,16 +14,28 @@ const UI_BUILD = join(__dirname);
 
 console.log("");
 const corsOptions = {
-  origin: "https://nutrifit-frontend.onrender.com", // frontend URI (ReactJS)
+  origin: "*", // frontend URI (ReactJS)
 };
 
 //"http://localhost:3000",local
-
 app.use(fileUpload());
 app.use(express.json());
 
 app.use(cors(corsOptions));
-app.options("*", cors());
+
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//   );
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   next();
+// });
+// app.options("*", cors());
 
 // app.use(express.static(path.join(UI_BUILD, "public")));
 
