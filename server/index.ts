@@ -23,15 +23,14 @@ console.log("UI Build", UI_BUILD);
 const projectRoot = path.resolve(UI_BUILD, "..");
 
 // Now, move into the 'client' directory
-const clientDirectory = path.join(projectRoot, "client");
 
-app.use(express.static(path.join(clientDirectory, "./build")));
-// console.log(path.join(__dirname, "./client/build"));
+app.use(express.static(path.join(projectRoot, ".client/build")));
+console.log(path.join(projectRoot, "./client/build"));
 app.use(fileUpload());
 app.use(express.json());
 app.use(cors(corsOptions));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "./client/build", "index.html"));
+  res.sendFile(path.join(projectRoot, "./client/build", "index.html"));
 });
 
 // app.use((req, res, next) => {
