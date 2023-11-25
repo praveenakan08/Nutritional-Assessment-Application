@@ -14,12 +14,16 @@ const UI_BUILD = join(__dirname);
 
 console.log("");
 const corsOptions = {
-  origin: "https://nutrifit-frontend.onrender.com" || "http://localhost:3000", // frontend URI (ReactJS)
+  origin: "https://nutrifit-frontend.onrender.com", // frontend URI (ReactJS)
 };
 
+//"http://localhost:3000",local
+
 app.use(fileUpload());
-app.use(cors(corsOptions));
 app.use(express.json());
+
+app.use(cors(corsOptions));
+
 // app.use(express.static(path.join(UI_BUILD, "public")));
 
 console.log("process.env.MONGODB_URI", process.env.MONGODB_URI);

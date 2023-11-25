@@ -10,8 +10,9 @@ const root = ReactDOM.createRoot(
 );
 
 console.log("process.env.PUBLIC_URL", process.env.PUBLIC_URL);
-const API_URL =
-  "https://nutrifit-backend.onrender.com/api" || "http://localhost:3001/api";
+const API_URL = "https://nutrifit-backend.onrender.com/api";
+
+//|| "http://localhost:3001/api"local
 
 root.render(
   <React.StrictMode>
