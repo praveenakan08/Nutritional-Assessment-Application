@@ -29,6 +29,8 @@ console.log("UI Build", UI_BUILD);
 app.use(fileUpload());
 app.use(express.json());
 app.use(cors(corsOptions));
+app.use("/static", express.static(path.join(__dirname, "/static")));
+console.log("Serving static files from /static");
 // app.get("*", (req, res) => {
 //   res.sendFile(path.join(projectRoot, "./client/build", "index.html"));
 // });
