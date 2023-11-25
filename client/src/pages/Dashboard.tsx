@@ -26,7 +26,7 @@ const Dashboard = (): JSX.Element => {
         </CardActionArea>
       </Card>
       <Card>
-        <CardActionArea component={Link} href="/analyzeImage">
+        <CardActionArea component={Link} href="/viewAssessmentHistory">
           <CardMedia
             component="img"
             image="/view-assessment-history.png"

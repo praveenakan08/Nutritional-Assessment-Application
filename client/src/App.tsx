@@ -11,6 +11,7 @@ import { ThemeProvider } from "@emotion/react";
 import { theme } from "./common/theme";
 import { Box } from "@mui/material";
 import useLoginCheck from "./userLoginCheck";
+import ViewAssessmentHistory from "./pages/ViewAssessmentHistory";
 
 const AppLayout = () => (
   <>
@@ -45,6 +46,7 @@ const App = (): JSX.Element => {
           <Route path="/uploadImage" element={<UploadImage />} />
           <Route path="/analyzeImage" element={<AnalyzeImage />} />
           <Route path="/viewProfile" element={<ViewProfile />} />
+          <Route path="/viewAssessmentHistory" element={<ViewAssessmentHistory />} />
         </Route>
         {/* )} */}
       </Routes>

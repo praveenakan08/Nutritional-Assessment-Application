@@ -63,6 +63,26 @@ app.get(`/api/viewProfile`, async (req, res) => {
   }
 });
 
+app.get(`/api/viewAssessmentHistory`, async (req, res) => {
+  try {
+    const email = req.query.email;
+    console.log("EMAIL: ", email);
+    MetricModel.find({ email })
+      .then((result: any) => {
+        res.json({
+          metrics: result,
+        });
+      })
+      .catch((err: any) => {
+        res.json({
+          error: err,
+        });
+      });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.post(`/api/register`, (req, res) => {
   const { name, email, gender, age, height, bmi, password } = req.body;
   RegisterModel.findOne({ email: email })
@@ -198,7 +218,7 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
         res.json({
           status: 200,
           message: "Metrics info inserted",
-          metrcis: result,
+          metrics: result,
         });
       })
       .catch((err: any) => {

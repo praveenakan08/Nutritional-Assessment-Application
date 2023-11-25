@@ -16,6 +16,10 @@ interface RegisterUserProps {
   password: string;
 }
 
+interface ViewAssessmentHistoryProps {
+  email: string | null;
+}
+
 interface GetUserDetailsProps {
   email: string | null;
 }
@@ -76,5 +80,16 @@ export const getUserDetails = async ({ email }: GetUserDetailsProps) => {
   } catch (error) {
     console.error("Error fetching user:", error);
     throw error;
+  }
+};
+
+export const viewAssessmentHistory = async ({ email }: ViewAssessmentHistoryProps) => {
+  try {
+    const result = await axios.get(
+      API_URL + `/viewAssessmentHistory?email=${email}`
+    );
+    return result.data;
+  } catch (error) {
+    return { success: false, message: "Could not fetch lol" };
   }
 };

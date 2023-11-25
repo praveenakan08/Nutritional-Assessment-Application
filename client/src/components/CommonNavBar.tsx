@@ -78,7 +78,7 @@ const CommonNavBar = (): JSX.Element => {
               {[
                 { text: "Dashboard", url: "/dashboard" },
                 { text: "Upload Food Image", url: "/uploadImage" },
-                { text: "View Assessment History", url: "/analyzeImage" },
+                { text: "View Assessment History", url: "/viewAssessmentHistory" },
               ].map((item, index) => (
                 <Link href={item.url} style={{ color: "#FFF" }}>
                   <ListItem key={item.text} disablePadding>
