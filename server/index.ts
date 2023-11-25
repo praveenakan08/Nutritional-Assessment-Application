@@ -22,6 +22,10 @@ app.use(express.json());
 
 console.log("process.env.MONGODB_URI", process.env.MONGODB_URI);
 
+app.get("/", (req, res) => {
+  res.status(201).json({ message: "Connected to Backend!" });
+});
+
 mongoose
   .connect(process.env.MONGODB_URI || "")
   .then(() => {
