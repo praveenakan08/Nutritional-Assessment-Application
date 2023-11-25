@@ -29,17 +29,16 @@ export const login = async ({ email, password }: LoginProps) => {
     const result = await axios.get(
       API_URL + `/login?email=${email}&password=${password}`
     );
-
     if (result.data.status === 200) {
       localStorage.setItem("email", email || "");
-      return { success: true, message: "Login successful" };
+      return { success: true, message: result.data.message };
     } else if (result.data.status === 403) {
-      return { success: false, message: "Wrong password! Try again" };
+      return { success: false, message: result.data.message };
     } else {
-      return { success: false, message: "Not registered" };
+      return { success: false, message: result.data.message };
     }
   } catch (error) {
-    return { success: false, message: "Not registered" };
+    return { success: false, message: error };
   }
 };
 
