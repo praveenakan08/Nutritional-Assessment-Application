@@ -11,8 +11,10 @@ require("dotenv").config();
 
 const app = express();
 const UI_BUILD = join(__dirname);
+
+console.log("");
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:3000", // frontend URI (ReactJS)
+  origin: "https://nutrifit-frontend.onrender.com" || "http://localhost:3000", // frontend URI (ReactJS)
 };
 
 app.use(fileUpload());
