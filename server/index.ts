@@ -10,36 +10,23 @@ import fs from "fs";
 require("dotenv").config();
 
 const app = express();
-const UI_BUILD = join(__dirname);
 
-console.log("");
 const corsOptions = {
-  origin: "*", // frontend URI (ReactJS)
+  origin: process.env.FRONTEND_URL || "https://localhost:3000", // frontend URI (ReactJS)
 };
 
-// Move up one level to the project root
-// const projectRoot = path.resolve(UI_BUILD, "..");
-
-// Now, move into the 'client' directory
-
-// app.use(express.static(path.join(projectRoot, ".client/build")));
-// console.log(path.join(projectRoot, "./client/build"));
 app.use(fileUpload());
 app.use(express.json());
 app.use(cors(corsOptions));
-// app.use("/static", express.static(path.join(__dirname, "/static")));
-// console.log("Serving static files from /static");
-
-console.log("process.env.MONGODB_URI", process.env.MONGODB_URI);
 
 app.get("/", (req, res) => {
   res.status(201).json({ message: "Connected to Backend!" });
 });
 
 mongoose
-  .connect(process.env.MONGODB_URI || "")
+  .connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/admin")
   .then(() => {
-    const PORT = process.env.PORT || 8000;
+    const PORT = process.env.PORT || 3001;
     app.listen(PORT, () => {
       console.log(`App is Listening on PORT ${PORT}`);
     });

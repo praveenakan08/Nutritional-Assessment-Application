@@ -8,9 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-const API_URL = "https://nutrifit-app.onrender.com/api";
-
-//|| "http://localhost:3001/api"local
+const API_URL = process.env.API_URL || "http://localhost:3001/api";
 
 root.render(
   <React.StrictMode>
