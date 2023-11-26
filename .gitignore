@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 gitignore
 # dependencies
 node_modules
@@ -27,5 +25,4 @@ yarn-error.log*
 
 dist
 final_model
->>>>>>> feature/project-deployment
 /node_modules
