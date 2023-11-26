@@ -184,7 +184,7 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     }
     const image = req.files.files as UploadedFile;
     const email = req.body.email;
-    const handler = tfn.io.fileSystem("./JSON MODEL-3/model.json");
+    const handler = tfn.io.fileSystem("./ml_model/model.json");
     const model = await tfn.loadGraphModel(handler);
 
     const imgBuffer = Buffer.from(image.data);
