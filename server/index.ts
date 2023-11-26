@@ -12,8 +12,10 @@ require("dotenv").config();
 const app = express();
 
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "https://localhost:3000", // frontend URI (ReactJS)
+  origin: "*",
 };
+
+//process.env.FRONTEND_URL || "https://localhost:3000", // frontend URI (ReactJS)
 
 app.use(fileUpload());
 app.use(express.json());
