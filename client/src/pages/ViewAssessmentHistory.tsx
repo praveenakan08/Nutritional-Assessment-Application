@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import {
   DataGrid,
   GridToolbarContainer,
@@ -7,6 +7,7 @@ import {
 } from "@mui/x-data-grid";
 import { viewAssessmentHistory } from "../axiosCalls";
 import { useEffect, useState } from "react";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 
 interface RowData {
   id?: string;
@@ -15,10 +16,31 @@ interface RowData {
 
 function CustomToolbar() {
   return (
-    <GridToolbarContainer>
-      <GridToolbarExport
-        printOptions={{ hideFooter: true, hideToolbar: true, fileName: 'Nutrition Assessment History' }}
-      />
+    <GridToolbarContainer style={{ display: "flex", justifyContent: "right" }}>
+      <Button color="success" variant="contained">
+        <GridToolbarExport
+          style={{ color: "white" }}
+          csvOptions={{
+            fileName: "Nutritional Metrics (CSV)",
+            hideFooter: true,
+            hideToolbar: true,
+          }}
+          printOptions={{
+            fileName: "Nutritional Metrics (PDF)",
+            hideFooter: true,
+            hideToolbar: true,
+          }}
+        />
+      </Button>
+      <Button
+        variant="contained"
+        color="success"
+        size="large"
+        // onClick={() => AnalyzeImage()}
+      >
+        <MailOutlineIcon sx={{ paddingRight: 1, fontSize: 12 }} />
+        <Typography sx={{fontSize: 17}}>Email</Typography>
+      </Button>
     </GridToolbarContainer>
   );
 }
@@ -26,6 +48,14 @@ function CustomToolbar() {
 const ViewAssessmentHistory = (): JSX.Element => {
   const [rows, setRows] = useState<RowData[]>([]);
   const email = localStorage.getItem("email");
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,7 +72,16 @@ const ViewAssessmentHistory = (): JSX.Element => {
           const mappedRow: RowData = {};
           mappedRow["id"] = row._id;
           columns.forEach((column) => {
-            mappedRow[column.field] = row[column.field];
+            if (column.field === "date") {
+              const inputDate = new Date(row[column.field]);
+              const dateTime = new Intl.DateTimeFormat(
+                "en-US",
+                timeOptions
+              ).format(inputDate);
+              mappedRow[column.field] = dateTime;
+            } else {
+              mappedRow[column.field] = row[column.field];
+            }
           });
           return mappedRow;
         });
@@ -58,35 +97,36 @@ const ViewAssessmentHistory = (): JSX.Element => {
   }, [rows]);
 
   const columns: GridColDef[] = [
-    { field: "dish", headerName: "Dish" },
+    { field: "dish", headerName: "Dish", width: 200 },
     { field: "calorie", headerName: "Calories(kcal)" },
     { field: "fat", headerName: "Fat(g)" },
     { field: "carbohydrates", headerName: "Carbs(g)" },
     { field: "protein", headerName: "Protein(g)" },
+    { field: "date", headerName: "Date", width: 200 },
   ];
 
   return (
     <Box
-      sx={{
+      style={{
+        width: "100%",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
+        paddingLeft: 60,
+        marginTop: 80,
       }}
     >
-      <Box>
-        {rows && (
-          <>
-            <DataGrid
-              columns={columns}
-              rows={rows}
-              slots={{
-                toolbar: CustomToolbar,
-              }}
-            />
-          </>
-        )}
-      </Box>
+      {rows && (
+        <>
+          <DataGrid
+            columns={columns}
+            rows={rows}
+            slots={{
+              toolbar: CustomToolbar,
+            }}
+          />
+        </>
+      )}
+      <Grid>{/* Graphs */}</Grid>
     </Box>
   );
 };
