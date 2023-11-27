@@ -6,43 +6,14 @@ import {
   GridColDef,
 } from "@mui/x-data-grid";
 import { viewAssessmentHistory } from "../axiosCalls";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import axios from "axios";
+import API_URL from "..";
 
 interface RowData {
   id?: string;
   [key: string]: any;
-}
-
-function CustomToolbar() {
-  return (
-    <GridToolbarContainer style={{ display: "flex", justifyContent: "right" }}>
-      <Button color="success" variant="contained">
-        <GridToolbarExport
-          style={{ color: "white" }}
-          csvOptions={{
-            fileName: "Nutritional Metrics (CSV)",
-            hideFooter: true,
-            hideToolbar: true,
-          }}
-          printOptions={{
-            fileName: "Nutritional Metrics (PDF)",
-            hideFooter: true,
-            hideToolbar: true,
-          }}
-        />
-      </Button>
-      <Button
-        variant="contained"
-        color="success"
-        size="large"
-        // onClick={() => AnalyzeImage()}
-      >
-        <MailOutlineIcon sx={{ paddingRight: 1, fontSize: 12 }} />
-        <Typography sx={{fontSize: 17}}>Email</Typography>
-      </Button>
-    </GridToolbarContainer>
-  );
 }
 
 const ViewAssessmentHistory = (): JSX.Element => {
@@ -96,6 +67,17 @@ const ViewAssessmentHistory = (): JSX.Element => {
     }
   }, [rows]);
 
+  const sendEmail = useCallback(async () => {
+    axios
+      .post(API_URL + "/sendEmail", {})
+      .then((result) => {
+        console.log("Result", result);
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+  }, []);
+
   const columns: GridColDef[] = [
     { field: "dish", headerName: "Dish", width: 200 },
     { field: "calorie", headerName: "Calories(kcal)" },
@@ -104,6 +86,40 @@ const ViewAssessmentHistory = (): JSX.Element => {
     { field: "protein", headerName: "Protein(g)" },
     { field: "date", headerName: "Date", width: 200 },
   ];
+
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer
+        style={{ display: "flex", justifyContent: "right" }}
+      >
+        <Button color="success" variant="contained">
+          <GridToolbarExport
+            style={{ color: "white" }}
+            csvOptions={{
+              fileName: "Nutritional Metrics (CSV)",
+              hideFooter: true,
+              hideToolbar: true,
+            }}
+            printOptions={{
+              fileName: "Nutritional Metrics (PDF)",
+              hideFooter: true,
+              hideToolbar: true,
+            }}
+            onClick={() => sendEmail()}
+          />
+        </Button>
+        <Button
+          variant="contained"
+          color="success"
+          size="large"
+          // onClick={() => AnalyzeImage()}
+        >
+          <MailOutlineIcon sx={{ paddingRight: 1, fontSize: 12 }} />
+          <Typography sx={{ fontSize: 17 }}>Email</Typography>
+        </Button>
+      </GridToolbarContainer>
+    );
+  }
 
   return (
     <Box

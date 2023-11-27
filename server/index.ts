@@ -7,6 +7,8 @@ import * as tfn from "@tensorflow/tfjs-node";
 import { Request, Response } from "express";
 import fileUpload, { UploadedFile } from "express-fileupload";
 import fs from "fs";
+import nodemailer from "nodemailer";
+import { createReadStream } from "fs";
 require("dotenv").config();
 
 const app = express();
@@ -383,5 +385,40 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error in analyzing image:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/api/sendEmail", async (req, res) => {
+  try {
+    // Use nodemailer to send an email with the attachment
+    const transporter = nodemailer.createTransport({
+      service: "gmail", // e.g., 'gmail'
+      auth: {
+        user: "mansi.rathi62@gmail.com",
+        pass: "xkks jpst efsm efmc",
+      },
+    });
+
+    const mailOptions = {
+      from: "mansi.rathi62@gmail.com",
+      to: "praveenakandukuri08@gmail.com", // Replace with the user's email
+      subject: "Nutrifit App Email Test",
+      text: "See attached Content",
+      // attachments: [
+      //   {
+      //     filename: "exported-file.csv", // Change the filename as needed
+      //     content: createReadStream(
+      //       path.join(__dirname, "path-to-exported-file.csv")
+      //     ),
+      //   },
+      // ],
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).send("Email sent successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
