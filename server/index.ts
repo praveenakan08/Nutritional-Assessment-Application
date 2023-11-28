@@ -204,10 +204,11 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     }
     const image = req.files.files as UploadedFile;
     const email = req.body.email;
-    const modelPath =
-      "file://" + path.resolve(__dirname, "ml_model/model.json");
-    //const handler = tfn.io.fileSystem("./ml_model/model-5");
-    const model = await tfn.loadGraphModel(modelPath);
+    // const modelPath =
+    //   "file://" +
+    //   path.resolve(__dirname, "ml_model/FoodNet-Model-0.2.1/model.json");
+    const handler = tfn.io.fileSystem("./ml_model/model.json");
+    const model = await tfn.loadGraphModel(handler);
 
     const imgBuffer = Buffer.from(image.data);
     const imgTensor = tfn.node.decodeImage(imgBuffer);
@@ -216,9 +217,9 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
 
     const channels = 3;
 
-    const normalizedImgTensor = resizedImgTensor.toFloat().div(255);
+    //const normalizedImgTensor = resizedImgTensor.toFloat().div(255);
 
-    const processedInput = normalizedImgTensor.reshape([1, 224, 224, channels]);
+    const processedInput = resizedImgTensor.reshape([-1, 224, 224, channels]);
 
     const predictions = model.predict(processedInput);
     const [
