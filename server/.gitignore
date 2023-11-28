@@ -1,5 +1,5 @@
 /node_modules
 /dist
-/final_model
-/JSON MODEL-3
+ml_model/balanced-model
+ml_model/new-balanced-model
 .env
