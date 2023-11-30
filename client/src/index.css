@@ -5,9 +5,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
   align-content: center;
   justify-content: center;
-  /* background-image: url('/register-background.png'); */
+  /* background-image: url('../public/bg-image.PNG'); */
+  background-color:beige;
   display: flex;
 }
+
+.register-page {
+  width:100%;
+}
+
 code {
   font-family: sans-serif;
 }

@@ -7,16 +7,35 @@ import * as tfn from "@tensorflow/tfjs-node";
 import { Request, Response } from "express";
 import fileUpload, { UploadedFile } from "express-fileupload";
 import fs from "fs";
+require("dotenv").config();
 
-const port = 3001;
 const app = express();
-const UI_BUILD = join(__dirname);
-app.use(fileUpload());
-app.use(cors());
-app.use(express.json());
-app.use(express.static(path.join(UI_BUILD, "public")));
 
-mongoose.connect("mongodb://127.0.0.1:27017/admin");
+const corsOptions = {
+  origin: "*",
+};
+
+//process.env.FRONTEND_URL || "https://localhost:3000", // frontend URI (ReactJS)
+
+app.use(fileUpload());
+app.use(express.json());
+app.use(cors(corsOptions));
+
+app.get("/", (req, res) => {
+  res.status(201).json({ message: "Connected to Backend!" });
+});
+
+mongoose
+  .connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/admin")
+  .then(() => {
+    const PORT = process.env.PORT || 3001;
+    app.listen(PORT, () => {
+      console.log(`App is Listening on PORT ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 function findKeyByValue(
   map: { [index: string]: number },
@@ -261,7 +280,7 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     }
     const image = req.files.files as UploadedFile;
     const email = req.body.email;
-    const handler = tfn.io.fileSystem("./JSON MODEL-3/model.json");
+    const handler = tfn.io.fileSystem("./ml_model/model.json");
     const model = await tfn.loadGraphModel(handler);
 
     const imgBuffer = Buffer.from(image.data);
@@ -365,8 +384,4 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     console.error("Error in analyzing image:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
-
-app.listen(port, () => {
-  console.log("Server is Running at 3001");
 });

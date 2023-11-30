@@ -88,6 +88,7 @@ const UploadImage = (): JSX.Element => {
     if (image) {
       setLoader(false);
     }
+    setLoader(false);
   }, []);
 
   const getStdMetrics = useCallback(async () => {

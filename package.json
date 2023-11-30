@@ -1,0 +1,29 @@
+{
+  "name": "nutritional-assessment-application",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install-server": "cd server && npm install",
+    "start-server": "cd server && npx ts-node index.ts",
+    "install-client": "cd client && npm install",
+    "build-client": "cd client && npm run build",
+    "start-client": "cd client && npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MansiRathi/Nutritional-Assessment-Application.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MansiRathi/Nutritional-Assessment-Application/issues"
+  },
+  "homepage": "https://github.com/MansiRathi/Nutritional-Assessment-Application#readme",
+  "devDependencies": {
+    "@types/node": "^20.8.6",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.3.2"
+  }
+}
