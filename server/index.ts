@@ -9,11 +9,9 @@ import { Request, Response } from "express";
 import fileUpload, { UploadedFile } from "express-fileupload";
 import fs from "fs";
 import nodemailer from "nodemailer";
-import { createReadStream } from "fs";
 require("dotenv").config();
 
 const app = express();
-
 const corsOptions = {
   origin: "*",
 };
@@ -23,11 +21,11 @@ const corsOptions = {
 app.use(fileUpload());
 app.use(express.json());
 app.use(cors(corsOptions));
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.status(201).json({ message: "Connected to Backend!" });
 });
-
 mongoose
   .connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/admin")
   .then(() => {
@@ -211,11 +209,6 @@ app.get("/api/getStdMetrics", async (req, res) => {
         });
       }
     }
-    // res.json({
-    //   message: "Error in fetching standard metrics info",
-    //   error: err,
-    //   status: 500,
-    // });
   });
 });
 
@@ -268,11 +261,6 @@ app.get("/api/getStdMetrics", async (req, res) => {
         });
       }
     }
-    // res.json({
-    //   message: "Error in fetching standard metrics info",
-    //   error: err,
-    //   status: 500,
-    // });
   });
 });
 
@@ -283,9 +271,6 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     }
     const image = req.files.files as UploadedFile;
     const email = req.body.email;
-    // const modelPath =
-    //   "file://" +
-    //   path.resolve(__dirname, "ml_model/FoodNet-Model-0.2.1/model.json");
     const handler = tfn.io.fileSystem("./ml_model/model.json");
     const model = await tfn.loadGraphModel(handler);
 
@@ -295,9 +280,6 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     const resizedImgTensor = tfn.image.resizeBilinear(imgTensor, [224, 224]);
 
     const channels = 3;
-
-    //const normalizedImgTensor = resizedImgTensor.toFloat().div(255);
-
     const processedInput = resizedImgTensor.reshape([-1, 224, 224, channels]);
 
     const predictions = model.predict(processedInput);
@@ -394,10 +376,12 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
 });
 
 app.post("/api/sendEmail", async (req, res) => {
+  const email = req.body.email;
+  const base64Data = req.body.file;
+  const buffer = Buffer.from(base64Data, "base64");
   try {
-    // Use nodemailer to send an email with the attachment
     const transporter = nodemailer.createTransport({
-      service: "gmail", // e.g., 'gmail'
+      service: "gmail",
       auth: {
         user: "mansi.rathi62@gmail.com",
         pass: "xkks jpst efsm efmc",
@@ -406,17 +390,15 @@ app.post("/api/sendEmail", async (req, res) => {
 
     const mailOptions = {
       from: "mansi.rathi62@gmail.com",
-      to: "praveenakandukuri08@gmail.com", // Replace with the user's email
-      subject: "Nutrifit App Email Test",
-      text: "See attached Content",
-      // attachments: [
-      //   {
-      //     filename: "exported-file.csv", // Change the filename as needed
-      //     content: createReadStream(
-      //       path.join(__dirname, "path-to-exported-file.csv")
-      //     ),
-      //   },
-      // ],
+      to: "mansi.rathi62@gmail.com",
+      subject: "Nutrifit Assessment Report",
+      text: "Here is your Assessment History!",
+      attachments: [
+        {
+          filename: `Nutrifit_Assessment_${new Date().getUTCDate()}.xlsx`,
+          content: buffer,
+        },
+      ],
     };
 
     await transporter.sendMail(mailOptions);
