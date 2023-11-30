@@ -16,7 +16,6 @@ const corsOptions = {
 };
 
 //process.env.FRONTEND_URL || "https://localhost:3000", // frontend URI (ReactJS)
-
 app.use(fileUpload());
 app.use(express.json());
 app.use(cors(corsOptions));
@@ -308,13 +307,6 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     console.log("CARBS PREDICTION", carbsValue);
     console.log("PROTEIN PREDICTION", proValue);
     console.log("FAT PREDICTION", fatValue);
-
-    // const nutritionalMetrics = [
-    //   { name: "calorie", value: calValue },
-    //   { name: "carbohydrates", value: carbsValue },
-    //   { name: "protein", value: proValue },
-    //   { name: "fat", value: fatValue },
-    // ];
 
     //Category Prediction
     const categoryFilePath = path.join(__dirname, "./metadata/cat.json");
