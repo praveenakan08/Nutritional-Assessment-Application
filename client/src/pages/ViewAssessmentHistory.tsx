@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { Metrics } from "../common/types";
 import generateExcelAndEmail from "../components/GenerateExcel";
+import API_URL from "..";
+import axios from "axios";
 interface RowData {
   id?: string;
   [key: string]: any;
@@ -105,6 +107,22 @@ const ViewAssessmentHistory = (): JSX.Element => {
     { field: "date", headerName: "Date", width: 200 },
   ];
 
+  const sendEmail = () => {
+    const formData = generateExcelAndEmail(prepareData());
+    axios
+      .post(API_URL + "/sendEmail", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((result) => {
+        console.log("Result", result);
+        alert("Email Sent Successfully");
+      })
+      .catch((err) => {
+        console.log("Error", err);
+        alert("There was some problem while sending an email");
+      });
+  };
+
   function CustomToolbar() {
     return (
       <GridToolbarContainer
@@ -129,7 +147,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
           variant="contained"
           color="success"
           size="large"
-          onClick={() => generateExcelAndEmail(prepareData())}
+          onClick={() => sendEmail()}
         >
           <MailOutlineIcon sx={{ paddingRight: 1, fontSize: 12 }} />
           <Typography sx={{ fontSize: 17 }}>Email</Typography>
@@ -139,28 +157,31 @@ const ViewAssessmentHistory = (): JSX.Element => {
   }
 
   return (
-    <Box
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        paddingLeft: 60,
-        marginTop: 80,
-      }}
-    >
-      {rows && (
-        <>
-          <DataGrid
-            columns={columns}
-            rows={rows}
-            slots={{
-              toolbar: CustomToolbar,
-            }}
-          />
-        </>
-      )}
-      <Grid>{/* Graphs */}</Grid>
-    </Box>
+    <>
+      <Box
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          paddingLeft: 60,
+          marginTop: 80,
+          position: "relative",
+        }}
+      >
+        {rows && (
+          <>
+            <DataGrid
+              columns={columns}
+              rows={rows}
+              slots={{
+                toolbar: CustomToolbar,
+              }}
+            />
+          </>
+        )}
+        <Grid>{/* Graphs */}</Grid>
+      </Box>
+    </>
   );
 };
 
