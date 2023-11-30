@@ -6,11 +6,10 @@ import {
   GridColDef,
 } from "@mui/x-data-grid";
 import { viewAssessmentHistory } from "../axiosCalls";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import axios from "axios";
-import API_URL from "..";
-
+import { Metrics } from "../common/types";
+import generateExcelAndEmail from "../components/GenerateExcel";
 interface RowData {
   id?: string;
   [key: string]: any;
@@ -18,21 +17,14 @@ interface RowData {
 
 const ViewAssessmentHistory = (): JSX.Element => {
   const [rows, setRows] = useState<RowData[]>([]);
+  const [metrics, setMetrics] = useState<Metrics[]>([]);
   const email = localStorage.getItem("email");
-  const timeOptions: Intl.DateTimeFormatOptions = {
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true,
-    month: "2-digit",
-    day: "2-digit",
-    year: "numeric",
-  };
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await viewAssessmentHistory({ email });
       const metrics = result.metrics;
-
+      setMetrics(metrics);
       if (metrics) {
         if (Array.isArray(metrics) && metrics.length === 0) {
           alert(
@@ -67,16 +59,42 @@ const ViewAssessmentHistory = (): JSX.Element => {
     }
   }, [rows]);
 
-  const sendEmail = useCallback(async () => {
-    axios
-      .post(API_URL + "/sendEmail", {})
-      .then((result) => {
-        console.log("Result", result);
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  }, []);
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+  };
+
+  const prepareData = () => {
+    const data = metrics.map((row, index) => ({
+      id: index + 1,
+      dish: row.dish,
+      date: row.date,
+      calories: row.calorie,
+      carbohydrates: row.carbohydrates,
+      fat: row.fat,
+      protein: row.protein,
+    }));
+    const excelData = [
+      {
+        columns: [
+          { title: "ID", dataIndex: "id" },
+          { title: "Dish", dataIndex: "dish" },
+          { title: "Date", dataIndex: "date" },
+          { title: "Calories", dataIndex: "calories" },
+          { title: "Carbohydrates", dataIndex: "carbohydrates" },
+          { title: "Fat", dataIndex: "fat" },
+          { title: "Protein", dataIndex: "protein" },
+        ],
+        data,
+      },
+    ];
+
+    return excelData;
+  };
 
   const columns: GridColDef[] = [
     { field: "dish", headerName: "Dish", width: 200 },
@@ -105,14 +123,13 @@ const ViewAssessmentHistory = (): JSX.Element => {
               hideFooter: true,
               hideToolbar: true,
             }}
-            onClick={() => sendEmail()}
           />
         </Button>
         <Button
           variant="contained"
           color="success"
           size="large"
-          // onClick={() => AnalyzeImage()}
+          onClick={() => generateExcelAndEmail(prepareData())}
         >
           <MailOutlineIcon sx={{ paddingRight: 1, fontSize: 12 }} />
           <Typography sx={{ fontSize: 17 }}>Email</Typography>
