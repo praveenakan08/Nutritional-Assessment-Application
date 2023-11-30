@@ -273,7 +273,6 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     const portion = parseInt(req.body.portion);
     console.log("Portion", portion);
     const handler = tfn.io.fileSystem("./ml_model/model.json");
-    ("https://github.com/Cheng-K/FoodNet-Model/releases/latest/download/model.json");
     const model = await tfn.loadGraphModel(handler);
 
     const imgBuffer = Buffer.from(image.data);
