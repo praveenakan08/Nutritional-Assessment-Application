@@ -4,7 +4,6 @@ import cors from "cors";
 import { RegisterModel, MetricModel } from "./models";
 import path, { join } from "path";
 import * as tfn from "@tensorflow/tfjs-node";
-import * as tf from "@tensorflow/tfjs";
 import { Request, Response } from "express";
 import fileUpload, { UploadedFile } from "express-fileupload";
 import fs from "fs";
