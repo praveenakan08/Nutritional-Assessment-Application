@@ -7,6 +7,7 @@ export interface Metrics {
   dish?: string;
   email?: string;
   name?: string;
+  _id?: string;
 }
 
 export interface MetricsObject {

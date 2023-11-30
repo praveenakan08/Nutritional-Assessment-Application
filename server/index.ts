@@ -4,14 +4,13 @@ import cors from "cors";
 import { RegisterModel, MetricModel } from "./models";
 import path, { join } from "path";
 import * as tfn from "@tensorflow/tfjs-node";
-import * as tf from "@tensorflow/tfjs";
 import { Request, Response } from "express";
 import fileUpload, { UploadedFile } from "express-fileupload";
 import fs from "fs";
+import nodemailer from "nodemailer";
 require("dotenv").config();
 
 const app = express();
-
 const corsOptions = {
   origin: "*",
 };
@@ -21,11 +20,11 @@ const corsOptions = {
 app.use(fileUpload());
 app.use(express.json());
 app.use(cors(corsOptions));
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.status(201).json({ message: "Connected to Backend!" });
 });
-
 mongoose
   .connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/admin")
   .then(() => {
@@ -123,7 +122,7 @@ app.get(`/api/viewAssessmentHistory`, async (req, res) => {
 });
 
 app.post(`/api/register`, (req, res) => {
-  const { name, email, gender, age, height, bmi, password } = req.body;
+  const { name, email, gender, age, height, weight, password } = req.body;
   RegisterModel.findOne({ email: email })
     .then((user: any) => {
       if (user) {
@@ -135,7 +134,7 @@ app.post(`/api/register`, (req, res) => {
           age: age,
           gender: gender,
           height: height,
-          bmi: bmi,
+          weight: weight,
           password: password,
         })
           .then((result: any) => {
@@ -209,11 +208,6 @@ app.get("/api/getStdMetrics", async (req, res) => {
         });
       }
     }
-    // res.json({
-    //   message: "Error in fetching standard metrics info",
-    //   error: err,
-    //   status: 500,
-    // });
   });
 });
 
@@ -266,11 +260,6 @@ app.get("/api/getStdMetrics", async (req, res) => {
         });
       }
     }
-    // res.json({
-    //   message: "Error in fetching standard metrics info",
-    //   error: err,
-    //   status: 500,
-    // });
   });
 });
 
@@ -281,10 +270,10 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     }
     const image = req.files.files as UploadedFile;
     const email = req.body.email;
-    // const modelPath =
-    //   "file://" +
-    //   path.resolve(__dirname, "ml_model/FoodNet-Model-0.2.1/model.json");
+    const portion = parseInt(req.body.portion);
+    console.log("Portion", portion);
     const handler = tfn.io.fileSystem("./ml_model/model.json");
+    ("https://github.com/Cheng-K/FoodNet-Model/releases/latest/download/model.json");
     const model = await tfn.loadGraphModel(handler);
 
     const imgBuffer = Buffer.from(image.data);
@@ -293,9 +282,6 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     const resizedImgTensor = tfn.image.resizeBilinear(imgTensor, [224, 224]);
 
     const channels = 3;
-
-    //const normalizedImgTensor = resizedImgTensor.toFloat().div(255);
-
     const processedInput = resizedImgTensor.reshape([-1, 224, 224, channels]);
 
     const predictions = model.predict(processedInput);
@@ -310,11 +296,14 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
 
     const categoryValues = category_output.arraySync() as number[];
     const ingValues = ing_output.arraySync() as number[];
-    const calValue = Math.round((cal_output.arraySync() as number) * 100) / 100;
+    const calValue =
+      Math.round((cal_output.arraySync() as number) * 100 * portion) / 100;
     const carbsValue =
-      Math.round((carbs_output.arraySync() as number) * 100) / 100;
-    const proValue = Math.round((pro_output.arraySync() as number) * 100) / 100;
-    const fatValue = Math.round((fat_output.arraySync() as number) * 100) / 100;
+      Math.round((carbs_output.arraySync() as number) * 100 * portion) / 100;
+    const proValue =
+      Math.round((pro_output.arraySync() as number) * 100 * portion) / 100;
+    const fatValue =
+      Math.round((fat_output.arraySync() as number) * 100 * portion) / 100;
 
     console.log("CALORIE PREDICTION", calValue);
     console.log("CARBS PREDICTION", carbsValue);
@@ -388,5 +377,40 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error in analyzing image:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/api/sendEmail", async (req, res) => {
+  const email = req.body.email;
+  const base64Data = req.body.file;
+  const buffer = Buffer.from(base64Data, "base64");
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "mansi.rathi62@gmail.com",
+        pass: "xkks jpst efsm efmc",
+      },
+    });
+
+    const mailOptions = {
+      from: "mansi.rathi62@gmail.com",
+      to: "mansi.rathi62@gmail.com",
+      subject: "Nutrifit Assessment Report",
+      text: "Here is your Assessment History!",
+      attachments: [
+        {
+          filename: `Nutrifit_Assessment_${new Date().getUTCDate()}.xlsx`,
+          content: buffer,
+        },
+      ],
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).send("Email sent successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });

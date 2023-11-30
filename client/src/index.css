@@ -6,7 +6,6 @@ body {
   align-content: center;
   justify-content: center;
   /* background-image: url('../public/bg-image.PNG'); */
-  background-color:beige;
   display: flex;
 }
 

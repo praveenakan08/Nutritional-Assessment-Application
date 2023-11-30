@@ -6,11 +6,11 @@ import {
   Button,
   Box,
   FormLabel,
-  CircularProgress,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { login } from "../axiosCalls";
+import { Bars } from "react-loader-spinner";
 
 const Login = (): JSX.Element => {
   const history = useNavigate();
@@ -20,9 +20,9 @@ const Login = (): JSX.Element => {
   const { handleSubmit } = useForm();
 
   const onSubmit = async () => {
-    setLoader(true);
+    //setLoader(true);
     const result = await login({ email, password });
-
+    //setLoader(false);
     if (result.success) {
       alert(result.message);
       history("/dashboard");
@@ -30,34 +30,45 @@ const Login = (): JSX.Element => {
       alert(result.message);
       history("/");
     }
-
-    setLoader(false);
   };
 
   return (
     <Box
       className="register-page"
       style={{
-        width: "100%",
-        height: "800px",
+        width: "1500px",
         display: "flex",
+        height: "800px",
         justifyContent: "center",
+        //backgroundImage: `url(${process.env.PUBLIC_URL}/bg.jpg)`,
       }}
     >
-      <Box
-        sx={{
-          bgcolor: "background.paper",
-          boxShadow: 1,
-          borderRadius: 2,
-          p: 2,
-          marginTop: 15,
-          justifyItems: "center",
-          width: 400,
-          height: 400,
-        }}
-      >
-        {loader && <CircularProgress color="success" />}
-        {!loader && (
+      {loader && (
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 40 }}>
+          <Bars
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="bars-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </Box>
+      )}
+      {!loader && (
+        <Box
+          sx={{
+            bgcolor: "background.paper",
+            boxShadow: 1,
+            borderRadius: 2,
+            p: 2,
+            marginTop: 15,
+            justifyItems: "center",
+            width: 400,
+            height: 400,
+          }}
+        >
           <Box onSubmit={handleSubmit(onSubmit)} component="form">
             <Grid container alignItems="center" spacing={3}>
               <Grid item xs={12}>
@@ -117,8 +128,8 @@ const Login = (): JSX.Element => {
               </Grid>
             </Grid>
           </Box>
-        )}
-      </Box>
+        </Box>
+      )}
     </Box>
   );
 };

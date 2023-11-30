@@ -7,7 +7,6 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  ThemeProvider,
   Typography,
 } from "@mui/material";
 import {
@@ -30,42 +29,19 @@ import {
   YAxis,
 } from "recharts";
 import { useNavigate } from "react-router-dom";
-import { changeDateTimeFormat, formatOnlyDate, formatOnlyTime } from "../timeConversions";
+import {
+  changeDateTimeFormat,
+  formatOnlyDate,
+  formatOnlyTime,
+} from "../timeConversions";
 
+import { Metrics } from "../common/types";
+import generateExcelAndEmail from "../components/GenerateExcel";
+import API_URL from "..";
+import axios from "axios";
 interface RowData {
   id?: string;
   [key: string]: any;
-}
-
-function CustomToolbar() {
-  return (
-    <GridToolbarContainer style={{ display: "flex", justifyContent: "right" }}>
-      <Button color="success" variant="contained">
-        <GridToolbarExport
-          style={{ color: "white" }}
-          csvOptions={{
-            fileName: "Nutritional Metrics (CSV)",
-            hideFooter: true,
-            hideToolbar: true,
-          }}
-          printOptions={{
-            fileName: "Nutritional Metrics (PDF)",
-            hideFooter: true,
-            hideToolbar: true,
-          }}
-        />
-      </Button>
-      <Button
-        variant="contained"
-        color="success"
-        size="large"
-        // onClick={() => AnalyzeImage()}
-      >
-        <MailOutlineIcon sx={{ paddingRight: 1, fontSize: 13 }} />
-        <Typography sx={{ fontSize: 17 }}>Email</Typography>
-      </Button>
-    </GridToolbarContainer>
-  );
 }
 
 const ViewAssessmentHistory = (): JSX.Element => {
@@ -73,12 +49,53 @@ const ViewAssessmentHistory = (): JSX.Element => {
   const [rows, setRows] = useState<RowData[]>([]);
   const [graphData, setGraphData] = useState<RowData[]>([]);
   const [filter, setFilter] = useState<any>();
+  const [metrics, setMetrics] = useState<Metrics[]>([]);
   const email = localStorage.getItem("email");
+
+  // initial render, fetching data for export table and setting initial filter to 'today'
+  useEffect(() => {
+    if (rows.length === 0) {
+      fetchData();
+    }
+  }, [rows]);
+
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer
+        style={{ display: "flex", justifyContent: "right" }}
+      >
+        <Button color="success" variant="contained">
+          <GridToolbarExport
+            style={{ color: "white" }}
+            csvOptions={{
+              fileName: "Nutritional Metrics (CSV)",
+              hideFooter: true,
+              hideToolbar: true,
+            }}
+            printOptions={{
+              fileName: "Nutritional Metrics (PDF)",
+              hideFooter: true,
+              hideToolbar: true,
+            }}
+          />
+        </Button>
+        <Button
+          variant="contained"
+          color="success"
+          size="large"
+          onClick={() => sendEmail()}
+        >
+          <MailOutlineIcon sx={{ paddingRight: 1, fontSize: 12 }} />
+          <Typography sx={{ fontSize: 17 }}>Email</Typography>
+        </Button>
+      </GridToolbarContainer>
+    );
+  }
 
   const fetchData = async () => {
     const result = await viewAssessmentHistory({ email });
     const metrics = result.metrics;
-
+    setMetrics(metrics);
     if (metrics) {
       if (Array.isArray(metrics) && metrics.length === 0) {
         alert(
@@ -94,7 +111,9 @@ const ViewAssessmentHistory = (): JSX.Element => {
 
         columns.forEach((column) => {
           if (column.field === "date") {
-            mappedRow[column.field] = changeDateTimeFormat(new Date(row[column.field]));
+            mappedRow[column.field] = changeDateTimeFormat(
+              new Date(row[column.field])
+            );
           } else {
             mappedRow[column.field] = row[column.field];
           }
@@ -226,8 +245,13 @@ const ViewAssessmentHistory = (): JSX.Element => {
             const formattedGroupDate = formatOnlyDate(group.date);
             const fomrattedRecordDate = formatOnlyDate(record.date);
 
-            return ((formattedGroupDate.slice(0, 2) === fomrattedRecordDate.slice(0, 2)) &&
-                    (formattedGroupDate.slice(6, 10) === fomrattedRecordDate.slice(6, 10)));});
+            return (
+              formattedGroupDate.slice(0, 2) ===
+                fomrattedRecordDate.slice(0, 2) &&
+              formattedGroupDate.slice(6, 10) ===
+                fomrattedRecordDate.slice(6, 10)
+            );
+          });
 
           if (existingIndex === -1) {
             result.push({ ...record });
@@ -259,13 +283,6 @@ const ViewAssessmentHistory = (): JSX.Element => {
     updateGraphData(selectedFilter);
   };
 
-  // initial render, fetching data for export table and setting initial filter to 'today'
-  useEffect(() => {
-    if (rows.length === 0) {
-      fetchData();
-    }
-  }, [rows]);
-
   const columns: GridColDef[] = [
     { field: "dish", headerName: "Dish", width: 200 },
     { field: "calorie", headerName: "Calories(kcal)" },
@@ -275,8 +292,51 @@ const ViewAssessmentHistory = (): JSX.Element => {
     { field: "date", headerName: "Date", width: 200 },
   ];
 
+  const sendEmail = () => {
+    const formData = generateExcelAndEmail(prepareData());
+    axios
+      .post(API_URL + "/sendEmail", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((result) => {
+        console.log("Result", result);
+        alert("Email Sent Successfully");
+      })
+      .catch((err) => {
+        console.log("Error", err);
+        alert("There was some problem while sending an email");
+      });
+  };
+
+  const prepareData = () => {
+    const data = metrics.map((row, index) => ({
+      id: index + 1,
+      dish: row.dish,
+      date: row.date,
+      calories: row.calorie,
+      carbohydrates: row.carbohydrates,
+      fat: row.fat,
+      protein: row.protein,
+    }));
+    const excelData = [
+      {
+        columns: [
+          { title: "ID", dataIndex: "id" },
+          { title: "Dish", dataIndex: "dish" },
+          { title: "Date", dataIndex: "date" },
+          { title: "Calories", dataIndex: "calories" },
+          { title: "Carbohydrates", dataIndex: "carbohydrates" },
+          { title: "Fat", dataIndex: "fat" },
+          { title: "Protein", dataIndex: "protein" },
+        ],
+        data,
+      },
+    ];
+
+    return excelData;
+  };
+
   return (
-    <ThemeProvider theme={currentTheme}>
     <Grid sx={{ flexDirection: "horizontal", rowGap: 10 }} xs={12}>
       <Box
         className="table"
@@ -374,7 +434,6 @@ const ViewAssessmentHistory = (): JSX.Element => {
         </Box>
       )}
     </Grid>
-    </ThemeProvider>
   );
 };
 

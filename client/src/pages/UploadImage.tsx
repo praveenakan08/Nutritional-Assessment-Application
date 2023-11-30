@@ -17,6 +17,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControl,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
@@ -35,6 +39,7 @@ import {
   YAxis,
 } from "recharts";
 import { Bars } from "react-loader-spinner";
+import { Img } from "react-image";
 
 const UploadImage = (): JSX.Element => {
   const email = localStorage.getItem("email") || "";
@@ -50,6 +55,7 @@ const UploadImage = (): JSX.Element => {
   const [ingredients, setIngredients] = useState<String[]>([]);
   const [age, setAge] = useState<number>();
   const [gender, setGender] = useState<string>();
+  const [portion, setPortion] = useState<string>("250");
   const imageStyle = { width: "500px", height: "500px" };
 
   useEffect(() => {
@@ -83,12 +89,7 @@ const UploadImage = (): JSX.Element => {
   };
 
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any) => {
-    setLoader(true);
     setImage(acceptedFiles[0]);
-    if (image) {
-      setLoader(false);
-    }
-    setLoader(false);
   }, []);
 
   const getStdMetrics = useCallback(async () => {
@@ -149,6 +150,7 @@ const UploadImage = (): JSX.Element => {
       }
       const formData = new FormData();
       formData.append("files", image);
+      formData.append("portion", portion);
       formData.append("email", email);
 
       setLoader(true);
@@ -177,6 +179,19 @@ const UploadImage = (): JSX.Element => {
     }
   }, [image]);
 
+  const Loader = (): JSX.Element => {
+    return (
+      <Bars
+        height="80"
+        width="80"
+        color="#4fa94d"
+        ariaLabel="bars-loading"
+        wrapperStyle={{}}
+        wrapperClass=""
+        visible={true}
+      />
+    );
+  };
   const FoodPrediction = (): JSX.Element => {
     return (
       <Grid container spacing={2} marginBottom={2}>
@@ -210,7 +225,7 @@ const UploadImage = (): JSX.Element => {
               <TableHead>
                 <TableRow>
                   <TableCell>Metrics</TableCell>
-                  <TableCell>Value(kcal/g)</TableCell>
+                  <TableCell>Value</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -224,7 +239,7 @@ const UploadImage = (): JSX.Element => {
                     }}
                   >
                     <TableCell component="th" scope="row">
-                      {key}
+                      {key === "calorie" ? "calories(kcal)" : key + "(g)"}
                     </TableCell>
                     <TableCell component="th" scope="row">
                       {value}
@@ -291,15 +306,7 @@ const UploadImage = (): JSX.Element => {
     >
       {loader && (
         <Box sx={{ display: "flex", justifyContent: "center", marginTop: 40 }}>
-          <Bars
-            height="80"
-            width="80"
-            color="#4fa94d"
-            ariaLabel="bars-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-          />
+          <Loader />
         </Box>
       )}
       {showDialog && (
@@ -343,12 +350,41 @@ const UploadImage = (): JSX.Element => {
       {!loader && (
         <Box>
           {image ? (
-            <Box sx={{ marginTop: 10 }}>
-              <img
-                style={imageStyle}
-                src={`${URL.createObjectURL(image)}`}
-                alt=""
-              />
+            <Box sx={{ width: "500px", height: "500px", marginTop: 10 }}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Portion of your Meal!
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={portion}
+                  label="Portion of your Meal!"
+                  onChange={(e) => setPortion(e.target.value)}
+                >
+                  <MenuItem value={250}>Small(250g)</MenuItem>
+                  <MenuItem value={500}>Medium(500g)</MenuItem>
+                  <MenuItem value={750}>Large(750g)</MenuItem>
+                </Select>
+              </FormControl>
+              <Box sx={{ marginTop: "10px" }}>
+                <Img
+                  style={imageStyle}
+                  src={`${URL.createObjectURL(image)}`}
+                  alt=""
+                  loader={
+                    <Box
+                      sx={{
+                        marginTop: 20,
+                        justifyContent: "center",
+                        display: "flex",
+                      }}
+                    >
+                      <Loader />
+                    </Box>
+                  }
+                />
+              </Box>
             </Box>
           ) : (
             <Grid container xs={12} columnGap={4}>
@@ -392,7 +428,7 @@ const UploadImage = (): JSX.Element => {
             }}
           >
             {image && (
-              <Box sx={{ display: "flex" }}>
+              <Box sx={{ position: "absolute" }}>
                 <Button
                   variant="contained"
                   color="success"

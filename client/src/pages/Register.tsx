@@ -72,7 +72,12 @@ const Register = (): JSX.Element => {
   return (
     <Box
       className="register-page"
-      style={{ width: "100%", display: "flex", justifyContent: "center" }}
+      sx={{
+        width: "1500px",
+        display: "flex",
+        justifyContent: "center",
+        //backgroundImage: `url(${process.env.PUBLIC_URL}/bg.jpg)`,
+      }}
     >
       <Box
         sx={{
