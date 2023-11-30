@@ -394,7 +394,7 @@ app.post("/api/sendEmail", async (req, res) => {
 
     const mailOptions = {
       from: "mansi.rathi62@gmail.com",
-      to: "mansi.rathi62@gmail.com",
+      to: email,
       subject: "Nutrifit Assessment Report",
       text: "Here is your Assessment History!",
       attachments: [
