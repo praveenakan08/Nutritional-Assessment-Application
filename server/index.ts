@@ -122,7 +122,7 @@ app.get(`/api/viewAssessmentHistory`, async (req, res) => {
 });
 
 app.post(`/api/register`, (req, res) => {
-  const { name, email, gender, age, height, bmi, password } = req.body;
+  const { name, email, gender, age, height, weight, password } = req.body;
   RegisterModel.findOne({ email: email })
     .then((user: any) => {
       if (user) {
@@ -134,7 +134,7 @@ app.post(`/api/register`, (req, res) => {
           age: age,
           gender: gender,
           height: height,
-          bmi: bmi,
+          weight: weight,
           password: password,
         })
           .then((result: any) => {
@@ -270,7 +270,10 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     }
     const image = req.files.files as UploadedFile;
     const email = req.body.email;
+    const portion = parseInt(req.body.portion);
+    console.log("Portion", portion);
     const handler = tfn.io.fileSystem("./ml_model/model.json");
+    ("https://github.com/Cheng-K/FoodNet-Model/releases/latest/download/model.json");
     const model = await tfn.loadGraphModel(handler);
 
     const imgBuffer = Buffer.from(image.data);
@@ -293,11 +296,14 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
 
     const categoryValues = category_output.arraySync() as number[];
     const ingValues = ing_output.arraySync() as number[];
-    const calValue = Math.round((cal_output.arraySync() as number) * 100) / 100;
+    const calValue =
+      Math.round((cal_output.arraySync() as number) * 100 * portion) / 100;
     const carbsValue =
-      Math.round((carbs_output.arraySync() as number) * 100) / 100;
-    const proValue = Math.round((pro_output.arraySync() as number) * 100) / 100;
-    const fatValue = Math.round((fat_output.arraySync() as number) * 100) / 100;
+      Math.round((carbs_output.arraySync() as number) * 100 * portion) / 100;
+    const proValue =
+      Math.round((pro_output.arraySync() as number) * 100 * portion) / 100;
+    const fatValue =
+      Math.round((fat_output.arraySync() as number) * 100 * portion) / 100;
 
     console.log("CALORIE PREDICTION", calValue);
     console.log("CARBS PREDICTION", carbsValue);
