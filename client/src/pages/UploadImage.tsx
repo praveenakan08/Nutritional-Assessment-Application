@@ -189,7 +189,10 @@ const UploadImage = (): JSX.Element => {
               <Grid item key={index} xs={12} sm={6} md={4}>
                 <Paper
                   elevation={3}
-                  style={{ padding: "10px", textAlign: "center" }}
+                  style={{
+                    padding: "10px",
+                    textAlign: "center",
+                  }}
                 >
                   <Typography variant="body1">{ingredient}</Typography>
                 </Paper>
