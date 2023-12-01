@@ -26,3 +26,5 @@ yarn-error.log*
 dist
 final_model
 /node_modules
+# Local Netlify folder
+.netlify
