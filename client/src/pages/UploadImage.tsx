@@ -39,7 +39,6 @@ import {
   YAxis,
 } from "recharts";
 import { Bars } from "react-loader-spinner";
-import { Img } from "react-image";
 
 const UploadImage = (): JSX.Element => {
   const email = localStorage.getItem("email") || "";
@@ -101,7 +100,7 @@ const UploadImage = (): JSX.Element => {
       .then((result) => {
         console.log("Get standard Metrics", result.data);
         const metrics = result.data.payload;
-        standardMetrics.calorie = metrics.calories;
+        standardMetrics.calorie = metrics.calorie;
         standardMetrics.fat = metrics.fat;
         standardMetrics.carbohydrates = metrics.carbohydrates;
         standardMetrics.protein = metrics.protein;
@@ -368,21 +367,10 @@ const UploadImage = (): JSX.Element => {
                 </Select>
               </FormControl>
               <Box sx={{ marginTop: "10px" }}>
-                <Img
+                <img
                   style={imageStyle}
                   src={`${URL.createObjectURL(image)}`}
                   alt=""
-                  loader={
-                    <Box
-                      sx={{
-                        marginTop: 20,
-                        justifyContent: "center",
-                        display: "flex",
-                      }}
-                    >
-                      <Loader />
-                    </Box>
-                  }
                 />
               </Box>
             </Box>

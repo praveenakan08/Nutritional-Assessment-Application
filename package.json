@@ -23,7 +23,6 @@
   "homepage": "https://github.com/MansiRathi/Nutritional-Assessment-Application#readme",
   "devDependencies": {
     "@types/node": "^20.8.6",
-    "nodemon": "^3.0.1",
     "typescript": "^5.3.2"
   }
 }

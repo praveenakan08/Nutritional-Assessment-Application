@@ -12,17 +12,15 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  ThemeProvider,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { theme } from "../common/theme";
 
 const drawerWidth = 240;
 
 const CommonNavBar = (): JSX.Element => {
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <AppBar
         position="fixed"
         sx={{
@@ -78,7 +76,10 @@ const CommonNavBar = (): JSX.Element => {
               {[
                 { text: "Dashboard", url: "/dashboard" },
                 { text: "Upload Food Image", url: "/uploadImage" },
-                { text: "View Assessment History", url: "/viewAssessmentHistory" },
+                {
+                  text: "View Assessment History",
+                  url: "/viewAssessmentHistory",
+                },
               ].map((item, index) => (
                 <Link href={item.url} style={{ color: "#FFF" }}>
                   <ListItem key={item.text} disablePadding>
@@ -112,7 +113,7 @@ const CommonNavBar = (): JSX.Element => {
           </Drawer>
         </Box>
       </Grid>
-    </ThemeProvider>
+    </>
   );
 };
 export default CommonNavBar;
