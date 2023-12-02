@@ -12,3 +12,7 @@
     from = "/*"
     to = "/index.html"
     status = 200
+    
+[build.environment]
+  NETLIFY_LAMBDA_RUN = "npm run start-server"
+
