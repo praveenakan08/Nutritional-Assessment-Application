@@ -1,12 +1,12 @@
 # netlify.toml
 [build]
   command = "npm run install-client && npm run build-client"  # Update to the correct build command for the client
-  functions = "server/functions"
+  functions = "netlify/functions"
   publish = "client/build"   # Update to the correct publish directory for the client
 
 [dev]
   publish = "client/build"
-  functions = "server/functions"
+  functions = "netlify/functions"
 
   [[redirects]]
     from = "/*"
