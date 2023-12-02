@@ -57,26 +57,26 @@ const ViewAssessmentHistory = (): JSX.Element => {
   useEffect(() => {
     if (rows.length === 0) {
       fetchData();
-    } 
+    }
     updateGraphData(filter);
   }, [rows]);
 
   function deepClone(obj: any): any {
-    if (obj === null || typeof obj !== 'object') {
+    if (obj === null || typeof obj !== "object") {
       return obj;
     }
-  
+
     if (Array.isArray(obj)) {
       return obj.map(deepClone);
     }
-  
+
     const clonedObj: any = {};
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
         clonedObj[key] = deepClone(obj[key]);
       }
     }
-  
+
     return clonedObj;
   }
 
@@ -150,7 +150,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
 
   const updateGraphData = (selectedFilter: string) => {
     const graphRows = deepClone(rows);
-    
+
     if (selectedFilter === "today") {
       const todayDate = formatOnlyDate(changeDateTimeFormat(new Date()));
       // 1. filter metrics on today's date
@@ -192,7 +192,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
           } else {
             result[existingIndex].fat += record.fat;
             result[existingIndex].carbohydrates += record.carbohydrates;
-            result[existingIndex].calorie += record.calorie;
+            result[existingIndex].calories += record.calories;
             result[existingIndex].protein += record.protein;
           }
 
@@ -235,7 +235,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
           } else {
             result[existingIndex].fat += record.fat;
             result[existingIndex].carbohydrates += record.carbohydrates;
-            result[existingIndex].calorie += record.calorie;
+            result[existingIndex].calories += record.calories;
             result[existingIndex].protein += record.protein;
           }
 
@@ -280,7 +280,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
           } else {
             result[existingIndex].fat += record.fat;
             result[existingIndex].carbohydrates += record.carbohydrates;
-            result[existingIndex].calorie += record.calorie;
+            result[existingIndex].calories += record.calories;
             result[existingIndex].protein += record.protein;
           }
 
@@ -307,7 +307,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
 
   const columns: GridColDef[] = [
     { field: "dish", headerName: "Dish", width: 200 },
-    { field: "calorie", headerName: "Calories(kcal)" },
+    { field: "calories", headerName: "calories(kcal)" },
     { field: "fat", headerName: "Fat(g)" },
     { field: "carbohydrates", headerName: "Carbs(g)" },
     { field: "protein", headerName: "Protein(g)" },
@@ -335,7 +335,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
       id: index + 1,
       dish: row.dish,
       date: row.date,
-      calories: row.calorie,
+      calories: row.calories,
       carbohydrates: row.carbohydrates,
       fat: row.fat,
       protein: row.protein,
@@ -346,7 +346,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
           { title: "ID", dataIndex: "id" },
           { title: "Dish", dataIndex: "dish" },
           { title: "Date", dataIndex: "date" },
-          { title: "Calories", dataIndex: "calories" },
+          { title: "calories", dataIndex: "calories" },
           { title: "Carbohydrates", dataIndex: "carbohydrates" },
           { title: "Fat", dataIndex: "fat" },
           { title: "Protein", dataIndex: "protein" },
@@ -439,7 +439,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
                   />
                   <Line
                     type="monotone"
-                    dataKey="calorie"
+                    dataKey="calories"
                     stroke="#e0d726"
                     activeDot={{ r: 8 }}
                   />

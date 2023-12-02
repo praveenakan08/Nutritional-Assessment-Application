@@ -303,7 +303,7 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
     const fatValue =
       Math.round((fat_output.arraySync() as number) * 100 * portion) / 100;
 
-    console.log("CALORIE PREDICTION", calValue);
+    console.log("calories PREDICTION", calValue);
     console.log("CARBS PREDICTION", carbsValue);
     console.log("PROTEIN PREDICTION", proValue);
     console.log("FAT PREDICTION", fatValue);
@@ -345,7 +345,7 @@ app.post("/api/analyze", async (req: Request, res: Response) => {
         email: email,
         dish: category,
         date: new Date(),
-        calorie: calValue,
+        calories: calValue,
         carbohydrates: carbsValue,
         protein: proValue,
         fat: fatValue,

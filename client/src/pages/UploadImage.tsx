@@ -76,6 +76,7 @@ const UploadImage = (): JSX.Element => {
       { name: "Current Metrics", ...currentMetrics },
       { name: "Standard Metrics", ...standardMetrics },
     ]);
+    console.log("Metrics", metricsData);
   }, [standardMetrics]);
 
   const handleClose = () => {
@@ -100,7 +101,7 @@ const UploadImage = (): JSX.Element => {
       .then((result) => {
         console.log("Get standard Metrics", result.data);
         const metrics = result.data.payload;
-        standardMetrics.calorie = metrics.calories;
+        standardMetrics.calories = metrics.calories;
         standardMetrics.fat = metrics.fat;
         standardMetrics.carbohydrates = metrics.carbohydrates;
         standardMetrics.protein = metrics.protein;
@@ -123,12 +124,12 @@ const UploadImage = (): JSX.Element => {
           protein = 0,
           carb = 0;
         metrics.map((metric: Metrics) => {
-          cal += metric.calorie;
+          cal += metric.calories;
           fat += metric.fat;
           carb += metric.carbohydrates;
           protein += metric.protein;
         });
-        currentMetrics.calorie = Math.round(cal * 100) / 100;
+        currentMetrics.calories = Math.round(cal * 100) / 100;
         currentMetrics.fat = Math.round(fat * 100) / 100;
         currentMetrics.carbohydrates = Math.round(carb * 100) / 100;
         currentMetrics.protein = Math.round(protein * 100) / 100;
@@ -228,24 +229,29 @@ const UploadImage = (): JSX.Element => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {Object.entries(prediction).map(([key, value]) => (
-                (key==='calorie'|| key==='carbohydrates'||key==='fat'||key==='protein') &&
-                  <TableRow
-                    key={key}
-                    sx={{
-                      "&:last-child td, &:last-child th": {
-                        border: 0,
-                      },
-                    }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {key === "calorie" ? "calories(kcal)" : key + "(g)"}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {value}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {Object.entries(prediction).map(
+                  ([key, value]) =>
+                    (key === "calories" ||
+                      key === "carbohydrates" ||
+                      key === "fat" ||
+                      key === "protein") && (
+                      <TableRow
+                        key={key}
+                        sx={{
+                          "&:last-child td, &:last-child th": {
+                            border: 0,
+                          },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {key === "calories" ? "calories(kcal)" : key + "(g)"}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {value}
+                        </TableCell>
+                      </TableRow>
+                    )
+                )}
               </TableBody>
             </Table>
           </TableContainer>
@@ -285,7 +291,7 @@ const UploadImage = (): JSX.Element => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="calorie" stackId="a" fill="#8884d8" />
+            <Bar dataKey="calories" stackId="a" fill="#8884d8" />
             <Bar dataKey="carbohydrates" stackId="a" fill="#82ca9d" />
             <Bar dataKey="protein" stackId="a" fill="#ffc658" />
             <Bar dataKey="fat" stackId="a" fill="#ff8042" />

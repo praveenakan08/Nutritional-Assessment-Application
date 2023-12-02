@@ -1,5 +1,5 @@
 export interface Metrics {
-  calorie: number;
+  calories: number;
   carbohydrates: number;
   fat: number;
   protein: number;

@@ -4,7 +4,7 @@ const MetricsSchema = new mongoose.Schema({
   email: String,
   dish: String,
   date: Date,
-  calorie: Number,
+  calories: Number,
   carbohydrates: Number,
   protein: Number,
   fat: Number,

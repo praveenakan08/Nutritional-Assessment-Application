@@ -1,6 +1,3 @@
 /node_modules
 /dist
-ml_model/balanced-model
-ml_model/new-balanced-model
-ml_model/FoodNet-Model-0.2.1
 .env
