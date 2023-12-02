@@ -100,7 +100,7 @@ const UploadImage = (): JSX.Element => {
       .then((result) => {
         console.log("Get standard Metrics", result.data);
         const metrics = result.data.payload;
-        standardMetrics.calorie = metrics.calorie;
+        standardMetrics.calorie = metrics.calories;
         standardMetrics.fat = metrics.fat;
         standardMetrics.carbohydrates = metrics.carbohydrates;
         standardMetrics.protein = metrics.protein;
@@ -228,7 +228,8 @@ const UploadImage = (): JSX.Element => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {Object.entries(currentMetrics).map(([key, value]) => (
+                {Object.entries(prediction).map(([key, value]) => (
+                (key==='calorie'|| key==='carbohydrates'||key==='fat'||key==='protein') &&
                   <TableRow
                     key={key}
                     sx={{

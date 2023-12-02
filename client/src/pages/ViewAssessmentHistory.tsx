@@ -9,6 +9,7 @@ import {
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
+
 import {
   DataGrid,
   GridToolbarContainer,
@@ -48,7 +49,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
   const history = useNavigate();
   const [rows, setRows] = useState<RowData[]>([]);
   const [graphData, setGraphData] = useState<RowData[]>([]);
-  const [filter, setFilter] = useState<any>();
+  const [filter, setFilter] = useState<any>("today");
   const [metrics, setMetrics] = useState<Metrics[]>([]);
   const email = localStorage.getItem("email");
 
@@ -56,8 +57,28 @@ const ViewAssessmentHistory = (): JSX.Element => {
   useEffect(() => {
     if (rows.length === 0) {
       fetchData();
-    }
+    } 
+    updateGraphData(filter);
   }, [rows]);
+
+  function deepClone(obj: any): any {
+    if (obj === null || typeof obj !== 'object') {
+      return obj;
+    }
+  
+    if (Array.isArray(obj)) {
+      return obj.map(deepClone);
+    }
+  
+    const clonedObj: any = {};
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        clonedObj[key] = deepClone(obj[key]);
+      }
+    }
+  
+    return clonedObj;
+  }
 
   function CustomToolbar() {
     return (
@@ -128,16 +149,18 @@ const ViewAssessmentHistory = (): JSX.Element => {
   };
 
   const updateGraphData = (selectedFilter: string) => {
+    const graphRows = deepClone(rows);
+    
     if (selectedFilter === "today") {
       const todayDate = formatOnlyDate(changeDateTimeFormat(new Date()));
       // 1. filter metrics on today's date
-      const filteredMetricsToday = rows.filter((metric: any) => {
+      const filteredMetricsToday = graphRows.filter((metric: any) => {
         const metricDate = formatOnlyDate(metric.date);
         return metricDate === todayDate;
       });
 
       // 2. x-axis - today's time
-      filteredMetricsToday.forEach((record) => {
+      filteredMetricsToday.forEach((record: any) => {
         record["date"] = formatOnlyTime(record["date"]);
       });
       setGraphData(filteredMetricsToday);
@@ -151,7 +174,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
       endOfWeek.setDate(startOfWeek.getDate() + 6);
 
       // 1. filter only this week's data
-      const filteredMetricsThisWeek = rows.filter((record: any) => {
+      const filteredMetricsThisWeek = graphRows.filter((record: any) => {
         const metricDate = new Date(record.date);
         return metricDate >= startOfWeek && metricDate <= endOfWeek;
       });
@@ -179,7 +202,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
       );
 
       // 3. x-axis - time, this week's days. Ex: Wed
-      const formattedMetrics = groupedMetrics.map((record) => {
+      const formattedMetrics = groupedMetrics.map((record: any) => {
         const dateObject = new Date(record.date);
         record.date = dateObject.toLocaleString("en-US", { weekday: "short" });
         return record;
@@ -195,11 +218,10 @@ const ViewAssessmentHistory = (): JSX.Element => {
       );
 
       // 1. filter records belonging to the current month
-      const filteredMetricsThisMonth = rows.filter((record: any) => {
+      const filteredMetricsThisMonth = graphRows.filter((record: any) => {
         const metricDate = new Date(record.date);
         return metricDate >= firstDayOfCurrentMonth && metricDate <= todayDate;
       });
-
       // 2. if same date's metrics are found then sum them up and return only one record from that date.
       const groupedMetricsThisMonth = filteredMetricsThisMonth.reduce(
         (result: any[], record: any) => {
@@ -233,7 +255,7 @@ const ViewAssessmentHistory = (): JSX.Element => {
       const currentYear = todayDate.getFullYear();
 
       // 1. filter records belonging to the current year
-      const filteredMetricsThisYear = rows.filter((record: any) => {
+      const filteredMetricsThisYear = graphRows.filter((record: any) => {
         const metricDate = new Date(record.date);
         return metricDate.getFullYear() === currentYear;
       });
