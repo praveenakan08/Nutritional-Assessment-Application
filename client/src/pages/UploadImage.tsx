@@ -45,7 +45,7 @@ const UploadImage = (): JSX.Element => {
   const [image, setImage] = useState<File>();
   const [loader, setLoader] = useState<boolean>(false);
   const [showDialog, setShowDialog] = useState<boolean>(false);
-  const [metricsData, setMetricsData] = useState<Metrics[]>([]);
+  const [metricsData, setMetricsData] = useState<Metrics[]>();
   const [currentMetrics, setCurrentmetrics] = useState<Metrics>({} as Metrics);
   const [standardMetrics, setStandardMetrics] = useState<Metrics>(
     {} as Metrics
@@ -77,7 +77,7 @@ const UploadImage = (): JSX.Element => {
       { name: "Standard Metrics", ...standardMetrics },
     ]);
     console.log("Metrics", metricsData);
-  }, [standardMetrics]);
+  }, [currentMetrics, standardMetrics]);
 
   const handleClose = () => {
     setShowDialog(false);
@@ -92,7 +92,7 @@ const UploadImage = (): JSX.Element => {
     setImage(acceptedFiles[0]);
   }, []);
 
-  const getStdMetrics = useCallback(async () => {
+  const getStdMetrics = () => {
     let standardMetrics = {} as Metrics;
     axios
       .get(
@@ -110,9 +110,9 @@ const UploadImage = (): JSX.Element => {
       .catch((err) => {
         console.log("Error", err.message);
       });
-  }, [age, gender, email]);
+  };
 
-  const getMetrics = useCallback(async () => {
+  const getMetrics = () => {
     let currentMetrics = {} as Metrics;
     axios
       .get(API_URL + `/getMetrics?email=${email}`)
@@ -140,7 +140,7 @@ const UploadImage = (): JSX.Element => {
         console.log("Error", err.message);
       });
     return currentMetrics;
-  }, [email]);
+  };
 
   const AnalyzeImage = useCallback(async () => {
     try {
